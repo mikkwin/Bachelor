@@ -46,4 +46,13 @@ These following things must be considered before approving a code review:
 - Has there been written documentation for the code.
 
 # Documenting
+Documenting is REQUIRED for each user story / feature uploaded to github.
+Documenting all scenarios and etc. is not required. Document only the most interesting ones that there are in that case.
+UML is not interesting. A flow chart or Sequence or System Sequence Diagram.
 
+# Testing
+Each feature must have an integration test coupled to it.
+Automatic testing is required.
+
+Testing is required where deemed necesarry by writer and reviewer.
+Reviewer has the last say wether or not theres a need for a test.
