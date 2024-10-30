@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototype/src/device_settings/settings_view.dart';
 
 class UnitPageView extends StatelessWidget {
   const UnitPageView({super.key});
@@ -38,7 +39,12 @@ class UnitPageView extends StatelessWidget {
                     ),
                   ElevatedButton(
                     
-                    onPressed: () {}
+                    onPressed: () {
+                      Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const settingsView())
+                    );
+                    }
                     , child: const Icon(Icons.settings)
                     )
                   ]
