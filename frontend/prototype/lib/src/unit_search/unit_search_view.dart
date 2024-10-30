@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototype/src/unit_page/unit_page_view.dart';
 
 /// Displays a list of SampleItems.
 class UnitSearchView extends StatelessWidget {
@@ -32,7 +33,10 @@ class UnitSearchView extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const UnitPageView())
+                    );
               }, 
               child: const Text("Search")
             ),
@@ -47,32 +51,39 @@ class UnitSearchView extends StatelessWidget {
               child: ListView(
                 children: const <Widget>[
                   ListTile(
-                    leading: Icon(Icons.accessible),
+                    leading: Icon(Icons.car_crash),
                     title: Text("Device: 123456789012345"),
+                    trailing: Icon(Icons.search),
                   ),
                   ListTile(
-                    leading: Icon(Icons.accessible),
+                    leading: Icon(Icons.car_crash),
                     title: Text("Device: 123456789012345"),
+                    trailing: Icon(Icons.search),
                   ),
                   ListTile(
-                    leading: Icon(Icons.accessible),
+                    leading: Icon(Icons.car_crash),
                     title: Text("Device: 123456789012345"),
+                    trailing: Icon(Icons.search),
                   ),
                   ListTile(
-                    leading: Icon(Icons.accessible),
+                    leading: Icon(Icons.car_crash),
                     title: Text("Device: 123456789012345"),
+                    trailing: Icon(Icons.search),
                   ),
                   ListTile(
-                    leading: Icon(Icons.accessible),
+                    leading: Icon(Icons.car_crash),
                     title: Text("Device: 123456789012345"),
+                    trailing: Icon(Icons.search),
                   ),
                   ListTile(
-                    leading: Icon(Icons.accessible),
+                    leading: Icon(Icons.car_crash),
                     title: Text("Device: 123456789012345"),
+                    trailing: Icon(Icons.search),
                   ),
                   ListTile(
-                    leading: Icon(Icons.zoom_out),
+                    leading: Icon(Icons.car_crash),
                     title: Text("Device: 123456789012345"),
+                    trailing: Icon(Icons.search),
                   ),
                   // Add more ListTile entries here if needed
                 ],
