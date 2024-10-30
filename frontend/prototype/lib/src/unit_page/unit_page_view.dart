@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/src/device_settings/settings_view.dart';
+import 'package:prototype/src/PostMortum/PostMortem.dart';
+import 'package:prototype/src/Data/DataPage.dart';
 
 class UnitPageView extends StatelessWidget {
   const UnitPageView({super.key});
@@ -94,12 +96,22 @@ class UnitPageView extends StatelessWidget {
               Row(
                 children: [
                   ElevatedButton(
-                    onPressed: () {}, 
+                    onPressed: () {
+                      Navigator.push(
+                    context,
+                    MaterialPageRoute(builder:(context) => const PostMortem())
+                );
+                    }, 
                     child: const Text("Skade Rapport")
                     ),
                   const Expanded( child: SizedBox()),
                   ElevatedButton(
-                    onPressed: () {}, 
+                    onPressed: () {
+                       Navigator.push(
+                    context,
+                    MaterialPageRoute(builder:(context) => const DataPage())
+                );
+                    }, 
                     child: const Text("Data")
                     )
                   ],
