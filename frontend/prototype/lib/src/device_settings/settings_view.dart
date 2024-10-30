@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/src/unit_search/unit_search_view.dart';
 import 'package:prototype/src/unit_page/unit_page_view.dart';
 
 class settingsView extends StatelessWidget {
