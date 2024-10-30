@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/src/unit_search/unit_search_view.dart';
+import 'package:prototype/src/unit_page/unit_page_view.dart';
 
 class settingsView extends StatelessWidget {
   const settingsView({super.key});
@@ -123,7 +124,10 @@ class settingsView extends StatelessWidget {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-               
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder:(context) => const UnitPageView())
+                  );
                 },
                 child: const Text('tilbage'),
               ),
