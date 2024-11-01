@@ -120,16 +120,6 @@ class settingsView extends StatelessWidget {
                 },
                 child: const Text('Gem ændring'),
               ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder:(context) => const UnitPageView())
-                  );
-                },
-                child: const Text('tilbage'),
-              ),
             ],
           )
         ),
