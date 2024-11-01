@@ -1,69 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:prototype/src/PostMortum/post_mortem_textfield.dart';
 import 'package:prototype/src/unit_search/unit_search_view.dart';
 
 class PostMortem extends StatelessWidget {
-const PostMortem({super.key});
+  const PostMortem({super.key});
 
-static const routeName = '/Skaderapport';
+  static const routeName = '/Skades_rapport';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Skaderapport"),
+        title: const Text("Skades rapport"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
+        child: SingleChildScrollView(
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: TextEditingController(text: "A"),
-              decoration: InputDecoration(
-                labelText: "Fejl",
-                border: OutlineInputBorder(),
+            PostMortemTextfield(
+              label: "Kundens problem",
+              onTextChanged: (newText) {
+                print("test: $newText"); // TODO: alter this.
+              }
               ),
-            ),
-            SizedBox(height: 32),
 
-            TextField(
-              controller: TextEditingController(text: "B"),
-              decoration: InputDecoration(
-                labelText: "Symptomer",
-                border: OutlineInputBorder(),
+            const SizedBox(height: 32),
+            
+            PostMortemTextfield(
+              label: "Hvad var løsningen",
+              onTextChanged: (newText) {
+                print("test: $newText"); // TODO: alter this.
+              }
               ),
-            ),
-            SizedBox(height: 32),
 
+            const SizedBox(height: 32),
 
-            TextField(
-              controller: TextEditingController(text: "C"),
-              decoration: InputDecoration(
-                labelText: "Hvad vi fiksede",
-                border: OutlineInputBorder(),
+            PostMortemTextfield(
+                label: "Hvilke hjælpe midler brugt",
+                onTextChanged: (newText) {
+                  print("test: $newText"); // TODO: alter this.
+                }),
+
+            const SizedBox(height: 32), // Spacer
+            
+            PostMortemTextfield(
+              label: "Yderligere info",
+              onTextChanged: (newText) {
+                print("test: $newText"); // TODO: alter this.
+              }
               ),
-            ),
-            SizedBox(height: 32), // Spacer
-
-            TextField(
-              controller: TextEditingController(text: "D"),
-              decoration: InputDecoration(
-                labelText: "Endelig rapport",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 32),
+              
+            const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder:(context) => const UnitSearchView())
-                );
+                    MaterialPageRoute(
+                        builder: (context) => const UnitSearchView()));
               },
-              child: const Text('Afslut'),
+              child: const Text('Gem'),
             ),
           ],
-        ),
+        )),
       ),
     );
   }
