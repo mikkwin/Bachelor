@@ -102,7 +102,7 @@ class UnitPageView extends StatelessWidget {
                     MaterialPageRoute(builder:(context) => const PostMortem())
                 );
                     }, 
-                    child: const Text("Skade Rapport")
+                    child: const Text("Skades Rapport")
                     ),
                   const Expanded( child: SizedBox()),
                   ElevatedButton(
