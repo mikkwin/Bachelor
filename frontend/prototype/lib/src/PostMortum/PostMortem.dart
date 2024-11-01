@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prototype/src/PostMortum/post_mortem_textfield.dart';
 import 'package:prototype/src/unit_search/unit_search_view.dart';
 
-class PostMortem extends StatelessWidget {
+class PostMortem extends StatelessWidget { // TODO: Lav til en stateful widget så der kan caches info om siden.
   const PostMortem({super.key});
 
   static const routeName = '/Skades_rapport';
