@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototype/src/login/login_view.dart';
 import 'package:prototype/src/unit_page/unit_page_view.dart';
 
 const List<String> searchType = <String>[
@@ -44,13 +45,22 @@ class UnitSearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Device Search'),
-      ),
-      body: Center(
-          child: Column(
-        children: [
+    return PopScope(
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            Future.delayed(Duration.zero, () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const LoginView()));
+            });
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Device Search'),
+          ),
+          body: Center(
+              child: Column(
+            children: [
           const SizedBox(height: 20),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.2),
@@ -59,66 +69,67 @@ class UnitSearchView extends StatelessWidget {
                 border: OutlineInputBorder(),
                 labelText: 'Search Parameter',
               ))),
+          const SizedBox(height: 20),    
           const DropDownButtonSearchType(),
           const SizedBox(height: 20),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const UnitPageView()));
-              },
-              child: const Text("Search")),
-          const SizedBox(height: 20),
-          Text("History",
-              style: TextStyle(
-                fontSize: screenWidth * 0.06,
-              )),
-          SizedBox(
-            height: 400, // Set a fixed height for the ListView
-            child: ListView(
-              children: const <Widget>[
-                ListTile(
-                  leading: Icon(Icons.car_crash),
-                  title: Text("Device: 123456789012345"),
-                  trailing: Icon(Icons.search),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const UnitPageView()));
+                  },
+                  child: const Text("Search")),
+              const SizedBox(height: 20),
+              Text("History",
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.06,
+                  )),
+              SizedBox(
+                height: 400, // Set a fixed height for the ListView
+                child: ListView(
+                  children: const <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.car_crash),
+                      title: Text("Device: 123456789012345"),
+                      trailing: Icon(Icons.search),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.car_crash),
+                      title: Text("Device: 123456789012345"),
+                      trailing: Icon(Icons.search),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.car_crash),
+                      title: Text("Device: 123456789012345"),
+                      trailing: Icon(Icons.search),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.car_crash),
+                      title: Text("Device: 123456789012345"),
+                      trailing: Icon(Icons.search),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.car_crash),
+                      title: Text("Device: 123456789012345"),
+                      trailing: Icon(Icons.search),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.car_crash),
+                      title: Text("Device: 123456789012345"),
+                      trailing: Icon(Icons.search),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.car_crash),
+                      title: Text("Device: 123456789012345"),
+                      trailing: Icon(Icons.search),
+                    ),
+                    // Add more ListTile entries here if needed
+                  ],
                 ),
-                ListTile(
-                  leading: Icon(Icons.car_crash),
-                  title: Text("Device: 123456789012345"),
-                  trailing: Icon(Icons.search),
-                ),
-                ListTile(
-                  leading: Icon(Icons.car_crash),
-                  title: Text("Device: 123456789012345"),
-                  trailing: Icon(Icons.search),
-                ),
-                ListTile(
-                  leading: Icon(Icons.car_crash),
-                  title: Text("Device: 123456789012345"),
-                  trailing: Icon(Icons.search),
-                ),
-                ListTile(
-                  leading: Icon(Icons.car_crash),
-                  title: Text("Device: 123456789012345"),
-                  trailing: Icon(Icons.search),
-                ),
-                ListTile(
-                  leading: Icon(Icons.car_crash),
-                  title: Text("Device: 123456789012345"),
-                  trailing: Icon(Icons.search),
-                ),
-                ListTile(
-                  leading: Icon(Icons.car_crash),
-                  title: Text("Device: 123456789012345"),
-                  trailing: Icon(Icons.search),
-                ),
-                // Add more ListTile entries here if needed
-              ],
-            ),
-          ),
-        ],
-      )),
-    );
+              ),
+            ],
+          )),
+        ));
   }
 }
