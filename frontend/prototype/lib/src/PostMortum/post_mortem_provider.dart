@@ -14,4 +14,13 @@ class PostMortemProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
+  void clearChanges () {
+    textbox1 = '';
+    textbox2 = '';
+    textbox3 = '';
+    textbox4 = '';
+
+    notifyListeners();
+  }
 }
