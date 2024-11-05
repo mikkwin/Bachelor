@@ -13,15 +13,13 @@ class DataPage extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Data'),
+      ),
       body: Center(
           child: Column(
             children: [
               const SizedBox(height: 20),
-              Text(
-                  "Data",
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.06,
-                  )),
               SizedBox(
                 height: 400,
                 child: ListView(
@@ -45,15 +43,6 @@ class DataPage extends StatelessWidget {
                     // Add more ListTile entries here if needed
                   ],
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder:(context) => const UnitPageView())
-                  );
-                },
-                child: const Text('Tilbage'),
               ),
             ],
           )
