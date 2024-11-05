@@ -2,7 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:prototype/src/login/login_view.dart';
 import 'package:prototype/src/unit_page/unit_page_view.dart';
 
-/// Displays a list of SampleItems.
+const List<String> searchType = <String>[
+  'IMEI',
+  'Firma',
+  'Stelnummer',
+  'Nummerplade'
+];
+
+class DropDownButtonSearchType extends StatefulWidget {
+  const DropDownButtonSearchType({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _DropDownButtonSearchTypeState();
+}
+
+class _DropDownButtonSearchTypeState extends State<DropDownButtonSearchType> {
+  String dropdownValue = searchType.first;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+        value: dropdownValue,
+        icon: const Icon(Icons.arrow_downward),
+        elevation: 16,
+        onChanged: (String? value) {
+          setState(() {
+            dropdownValue = value!;
+          });
+        },
+        items: searchType.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(value: value, child: Text(value));
+        }).toList());
+  }
+}
+
 class UnitSearchView extends StatelessWidget {
   const UnitSearchView({super.key});
 
