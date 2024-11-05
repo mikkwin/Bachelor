@@ -36,7 +36,6 @@ class _DropDownButtonSearchTypeState extends State<DropDownButtonSearchType> {
   }
 }
 
-/// Displays a list of SampleItems.
 class UnitSearchView extends StatelessWidget {
   const UnitSearchView({super.key});
 
