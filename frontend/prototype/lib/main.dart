@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototype/src/device_settings/temp_provider.dart';
 import 'package:prototype/src/post_mortem/post_mortem_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,8 @@ void main() async {
   // SettingsView.
   runApp(
     MultiProvider(providers: [
-      ChangeNotifierProvider(create: (_) => PostMortemProvider())
+      ChangeNotifierProvider(create: (_) => PostMortemProvider()),
+      ChangeNotifierProvider(create: (_) => TempProvider())
     ],
     child: MyApp(),
     )
