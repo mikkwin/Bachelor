@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/src/PostMortum/post_mortem_provider.dart';
-import 'package:prototype/src/PostMortum/post_mortem_textfield.dart';
+import 'package:prototype/src/post_mortem/post_mortem_provider.dart';
+import 'package:prototype/src/post_mortem/post_mortem_textfield.dart';
 import 'package:prototype/src/unit_search/unit_search_view.dart';
 import 'package:provider/provider.dart';
 
