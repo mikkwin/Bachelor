@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:prototype/src/PostMortum/post_mortem_provider.dart';
 import 'package:prototype/src/PostMortum/post_mortem_textfield.dart';
 import 'package:prototype/src/unit_search/unit_search_view.dart';
+import 'package:provider/provider.dart';
 
-class PostMortem extends StatelessWidget { // TODO: Lav til en stateful widget så der kan caches info om siden.
+class PostMortem extends StatelessWidget {
   const PostMortem({super.key});
 
   static const routeName = '/Skades_rapport';
 
   @override
   Widget build(BuildContext context) {
+
+    final provider = Provider.of<PostMortemProvider>(context);
+
+    String text1 = provider.textbox1;
+    String text2 = provider.textbox2;
+    String text3 = provider.textbox3;
+    String text4 = provider.textbox4;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Skades rapport"),
@@ -21,8 +31,9 @@ class PostMortem extends StatelessWidget { // TODO: Lav til en stateful widget s
           children: [
             PostMortemTextfield(
               label: "Kundens problem",
+              initialText: text1,
               onTextChanged: (newText) {
-                print("test: $newText"); // TODO: alter this.
+                provider.saveChanges(newText, text2, text3, text4);
               }
               ),
 
@@ -30,8 +41,9 @@ class PostMortem extends StatelessWidget { // TODO: Lav til en stateful widget s
             
             PostMortemTextfield(
               label: "Hvad var løsningen",
+              initialText: text2,
               onTextChanged: (newText) {
-                print("test: $newText"); // TODO: alter this.
+                provider.saveChanges(text1, newText, text3, text4);
               }
               ),
 
@@ -39,16 +51,18 @@ class PostMortem extends StatelessWidget { // TODO: Lav til en stateful widget s
 
             PostMortemTextfield(
                 label: "Hvilke hjælpe midler brugt",
+                initialText: text3,
                 onTextChanged: (newText) {
-                  print("test: $newText"); // TODO: alter this.
+                  provider.saveChanges(text1, text2, newText, text4);
                 }),
 
             const SizedBox(height: 32), // Spacer
             
             PostMortemTextfield(
               label: "Yderligere info",
+              initialText: text4,
               onTextChanged: (newText) {
-                print("test: $newText"); // TODO: alter this.
+                provider.saveChanges(text1, text2, text3, newText);
               }
               ),
               
