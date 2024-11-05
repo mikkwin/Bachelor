@@ -2,6 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:prototype/src/login/login_view.dart';
 import 'package:prototype/src/unit_page/unit_page_view.dart';
 
+const List<String> searchType = <String>[
+  'IMEI',
+  'Firma',
+  'Stelnummer',
+  'Nummerplade'
+];
+
+class DropDownButtonSearchType extends StatefulWidget {
+  const DropDownButtonSearchType({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _DropDownButtonSearchTypeState();
+}
+
+class _DropDownButtonSearchTypeState extends State<DropDownButtonSearchType> {
+  String dropdownValue = searchType.first;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+        value: dropdownValue,
+        icon: const Icon(Icons.arrow_downward),
+        elevation: 16,
+        onChanged: (String? value) {
+          setState(() {
+            dropdownValue = value!;
+          });
+        },
+        items: searchType.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(value: value, child: Text(value));
+        }).toList());
+  }
+}
+
 /// Displays a list of SampleItems.
 class UnitSearchView extends StatelessWidget {
   const UnitSearchView({super.key});
@@ -28,17 +62,17 @@ class UnitSearchView extends StatelessWidget {
           body: Center(
               child: Column(
             children: [
-              const Text(
-                  "Please input device ID"), // Potententiel fremtidig tjek: Søg efter device
-              const SizedBox(height: 20),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.2),
-                  child: const TextField(
-                      decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'ID',
-                  ))),
-              const SizedBox(height: 20),
+          const SizedBox(height: 20),
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.2),
+              child: const TextField(
+                  decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Search Parameter',
+              ))),
+          const SizedBox(height: 20),    
+          const DropDownButtonSearchType(),
+          const SizedBox(height: 20),
               ElevatedButton(
                   onPressed: () {
                     Navigator.push(
