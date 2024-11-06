@@ -9,6 +9,9 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String username = "";
+    String pass = "";
+
     return PopScope(
         canPop: false,
         child: Scaffold(
@@ -24,8 +27,9 @@ class LoginView extends StatelessWidget {
                   children: [
                     const Text('Welcome! Please log in.'),
                     const SizedBox(height: 20),
-                    const TextField(
-                      decoration: InputDecoration(
+                    TextField(
+                      onChanged: (value) {username = value;},
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Username',
                       ),
@@ -33,9 +37,10 @@ class LoginView extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    const TextField(
+                    TextField(
                       obscureText: true,
-                      decoration: InputDecoration(
+                      onChanged: (value) {pass = value;},
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Password',
                       ),
@@ -45,10 +50,11 @@ class LoginView extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
+                        if (pass == "test" && username == "test"){
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const UnitSearchView()));
+                                builder: (context) => const UnitSearchView()));}
                       },
                       child: const Text('Login'),
                     ),
