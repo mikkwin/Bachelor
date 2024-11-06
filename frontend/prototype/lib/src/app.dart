@@ -9,6 +9,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      debugShowMaterialGrid: false,
 
       // Define the named route for LoginView
       onGenerateRoute: (RouteSettings routeSettings) {

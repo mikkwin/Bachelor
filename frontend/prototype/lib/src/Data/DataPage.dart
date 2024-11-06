@@ -29,6 +29,10 @@ class DataPage extends StatelessWidget {
                       title: Text("Batteriniveau: 78%"),
                     ),
                     ListTile(
+                      leading: Icon(Icons.battery_5_bar),
+                      title: Text("Akkumuleret: 12345W"),
+                    ),
+                    ListTile(
                       leading: Icon(Icons.calendar_month_sharp),
                       title: Text("Installationsdato: 14/1/2019"),
                     ),
@@ -37,8 +41,20 @@ class DataPage extends StatelessWidget {
                       title: Text("Opladningshastighed: 152kWh"),
                     ),
                     ListTile(
-                      leading: Icon(Icons.numbers),
-                      title: Text("Antal opladninger: 1245"),
+                      leading: Icon(Icons.speed),
+                      title: Text("Batteri Amp: 100W"),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.speed),
+                      title: Text("Batteri Volt: 100W"),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.speed),
+                      title: Text("Panel Amp: 100W"),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.speed),
+                      title: Text("Panel Volt: 100W"),
                     ),
                     // Add more ListTile entries here if needed
                   ],
