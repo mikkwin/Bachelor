@@ -33,7 +33,7 @@ class UnitPageView extends StatelessWidget {
                     ),
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
-                      child: const Center(child: Text("ID 12345678901345"))
+                      child: const Center(child: Text("ID: 123456789012345"))
                       ),
                   ),
                   const Expanded(
@@ -62,14 +62,7 @@ class UnitPageView extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "Fejl! Intet Batteri tilsluttet", 
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          decorationStyle: TextDecorationStyle.solid
-                          ),
-                        ),
-                      Text(
-                        "Fejl! Intet Panel tilsluttet", 
+                        "Ingen fejl fundet", 
                         style: TextStyle(
                           decoration: TextDecoration.underline,
                           decorationStyle: TextDecorationStyle.solid
@@ -88,7 +81,7 @@ class UnitPageView extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03, vertical: screenWidth * 0.02),
-                    child: const Text("Fejlkode: 1\nProblemer med spænding.\nTjek om batteriet er slået til"),
+                    child: const Text("Ingen fejl diagnosticeret i automat diagnosticering."),
                     ),
                 )
               ),
