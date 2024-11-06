@@ -30,7 +30,7 @@ class DataPage extends StatelessWidget {
                     ),
                     ListTile(
                       leading: Icon(Icons.battery_5_bar),
-                      title: Text("Akkumuleret: 12345W"),
+                      title: Text("Akkumuleret: 12345"),
                     ),
                     ListTile(
                       leading: Icon(Icons.calendar_month_sharp),
@@ -42,19 +42,19 @@ class DataPage extends StatelessWidget {
                     ),
                     ListTile(
                       leading: Icon(Icons.speed),
-                      title: Text("Batteri Amp: 100W"),
+                      title: Text("Batteri Amp: 100"),
                     ),
                     ListTile(
                       leading: Icon(Icons.speed),
-                      title: Text("Batteri Volt: 100W"),
+                      title: Text("Batteri Volt: 100"),
                     ),
                     ListTile(
                       leading: Icon(Icons.speed),
-                      title: Text("Panel Amp: 100W"),
+                      title: Text("Panel Amp: 100"),
                     ),
                     ListTile(
                       leading: Icon(Icons.speed),
-                      title: Text("Panel Volt: 100W"),
+                      title: Text("Panel Volt: 100"),
                     ),
                     // Add more ListTile entries here if needed
                   ],
