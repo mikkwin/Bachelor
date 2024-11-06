@@ -35,7 +35,7 @@ class settingsView extends StatelessWidget {
                   onTextChange: (text) {
                     provider.saveChanges(text, setting2, setting3, setting4, setting5, setting6);                 
                   },
-                  label: "Setting 1",
+                  label: "Batteri type",
                   initialText: provider.textbox1,
                   suffixText: "%",
                 ),
