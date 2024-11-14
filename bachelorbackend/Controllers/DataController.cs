@@ -18,19 +18,45 @@ public class DataController : ControllerBase
     }
 
 
-    [HttpGet]
+    /*
+    [HttpGet("GetHistory")]
     [AllowAnonymous]
     public List<Vehicle> GetHistory(int technicianID)
     {
-        List<Vehicle> vehicles;
+        List<Vehicle> res = _dataService.getTechnicianHistory(technicianID);
 
+        if (res.Count == 0)
+        {
+            return new List<Vehicle>();
+        }
+        
+        return res;
+    }
 
-        vehicles = _dataService.getTechnicianHistory(technicianID);
+    [HttpGet("VehicleSearch")]
+    [AllowAnonymous]
+    public List<Vehicle> VehicleSearch(dynamic query)
+    {
+        List<Vehicle> res = _dataService.VehicleSearch(query);
 
-
-        return vehicles;
-            
+        if (res.Count == 0)
+        {
+            return new List<Vehicle>();
+        }
+        
+        return res;
         
     }
     
+    */
+
+    [HttpGet("GetVehicle")]
+    [AllowAnonymous]
+    public VehicleInfo getVehicle(int IMEI)
+    {
+        VehicleInfo info = _dataService.getVehicleInfo(IMEI);
+
+        return info;
+    }
+
 }

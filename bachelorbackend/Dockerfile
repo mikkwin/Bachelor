@@ -6,7 +6,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["bachelorbackend/bachelorbackend.csproj", "bachelorbackend/"]
-RUN dotnet restore "bachelorbackend/bachelorbackend.csproj"
+RUN dotnet restore "bachelorbackend.csproj"
 COPY . .
 WORKDIR "/src/bachelorbackend"
 RUN dotnet build "bachelorbackend.csproj" -c Release -o /app/build

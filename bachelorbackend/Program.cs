@@ -10,30 +10,51 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IDataService, DataService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    // Bind to HTTP on port 5000
+    options.ListenAnyIP(5000, listenOptions =>
+    {
+        listenOptions.UseHttps();  // Enable HTTPS on port 5001
+    });
+    // Bind to HTTPS on port 5001
+    options.ListenAnyIP(5001, listenOptions =>
+    {
+        listenOptions.UseHttps();  // Make sure you have a valid certificate for this
+    });
+});
+
+
 var app = builder.Build();
 
-app.UseRouting();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    // Comment out or remove the HSTS middleware for now
+    // app.UseHsts();  // Removed to disable HSTS
 }
 
-app.UseHttpsRedirection();
+// Disable HTTPS redirection
+// app.UseHttpsRedirection(); // Comment out or remove this line to avoid redirection to HTTPS
 
+app.UseStaticFiles();
+app.UseRouting();
+app.UseAuthorization();
 
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller}/{action}");
+// Map controllers (API routes)
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
 
-        });
+// Enable static files middleware (this line is already present above)
 app.UseStaticFiles();
 
+// Ensure routing and authorization
 app.UseRouting();
 
 app.MapBlazorHub();
