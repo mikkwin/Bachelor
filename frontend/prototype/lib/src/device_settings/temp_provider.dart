@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TempProvider with ChangeNotifier {
-  String textbox1 = '12';
+  String textbox1 = '120W';
   String textbox2 = '57';
   String textbox3 = '15';
   String textbox4 = '57';

@@ -62,6 +62,7 @@ class PostMortem extends StatelessWidget {
               label: "Yderligere info",
               initialText: text4,
               onTextChanged: (newText) {
+                print("test");
                 provider.saveChanges(text1, text2, text3, newText);
               }
               ),
