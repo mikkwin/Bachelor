@@ -113,7 +113,7 @@ class UnitPageView extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const DataPage()));
+                                      builder: (context) => DataPage()));
                             },
                             child: const Text("Data"))
                       ],
