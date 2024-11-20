@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using bachelorbackend.Data;
+using bachelorbackend.Data.DB;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,9 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IDataService, DataService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseSqlite("Data Source=bachelor.db"));
 
 builder.WebHost.ConfigureKestrel(options =>
 {
