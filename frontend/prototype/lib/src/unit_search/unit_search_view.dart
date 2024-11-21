@@ -3,6 +3,7 @@ import 'package:prototype/src/login/login_view.dart';
 import 'package:prototype/src/unit_page/unit_page_view.dart';
 import 'package:prototype/src/unit_search/unit_search_button.dart';
 
+/// Displays a list of SampleItems.
 class UnitSearchView extends StatelessWidget {
   const UnitSearchView({super.key});
 
@@ -11,6 +12,11 @@ class UnitSearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+
+    var stel = "ABCD1234567890";
+    var nummer = "EGA12345";
+    var firma = "VIA";
+    var _text = "";
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
