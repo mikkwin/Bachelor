@@ -48,7 +48,7 @@ public class DataController : ControllerBase
         
     }
     
-    */
+    
 
     [HttpGet("GetVehicle")]
     [AllowAnonymous]
@@ -57,6 +57,17 @@ public class DataController : ControllerBase
         VehicleInfo info = _dataService.getVehicleInfo(IMEI);
 
         return info;
+    }
+
+*/
+    
+    [HttpGet("VehicleSearch")]
+    [AllowAnonymous]
+    public Task<VehicleInfo> getVehicle(int imei, string currentToken)
+    {
+        VehicleInfo vehicleInfo = _dataService.getVehicleInfo(imei, currentToken).Result;
+
+        return Task.FromResult(vehicleInfo);
     }
 
 }
