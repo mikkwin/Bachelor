@@ -178,6 +178,10 @@ class UnitSearchView extends StatelessWidget {
                 // You can access the text entered in _controller.text
                 print("User entered: ${_controller.text}");
                 Navigator.of(context).pop(); // Close the dialog
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder:(context) => const UnitPageView())
+                );
               },
               child: const Text('Submit'),
             ),
