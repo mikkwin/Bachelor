@@ -1,12 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:prototype/src/DAOs/Vehicle.dart';
 import 'package:prototype/src/device_settings/settings_view.dart';
+import 'package:prototype/src/http_requests.dart';
 import 'package:prototype/src/post_mortem/post_mortem.dart';
 import 'package:prototype/src/Data/DataPage.dart';
 
-class UnitPageView extends StatelessWidget {
-  const UnitPageView({super.key, required token, required device_id});
+class UnitPageView extends StatefulWidget {
+  final String deviceImei;
+  final String token;
 
+  const UnitPageView(
+      {super.key, required this.token, required this.deviceImei});
   static const routeName = '/unit_page';
+
+  @override
+  createState() => _UnitPageViewState();
+}
+
+class _UnitPageViewState extends State<UnitPageView> {
+  Vehicle _vehicle = Vehicle(id: 1, imei: 12345678901245);
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchInitialData();
+  }
+
+  Future<void> _fetchInitialData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      _vehicle = await getDevice(widget.deviceImei, widget.token);
+    } catch (e) {
+      throw Exception("Error fetching device: $e");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +67,8 @@ class UnitPageView extends StatelessWidget {
                         child: Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: screenWidth * 0.01),
-                            child: const Center(
-                                child: Text("IMEI: 123456789012345"))),
+                            child:
+                                Center(child: Text("IMEI: ${_vehicle.imei}"))),
                       ),
                       const Expanded(child: SizedBox()),
                       ElevatedButton(
@@ -56,8 +91,8 @@ class UnitPageView extends StatelessWidget {
                       child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: screenWidth * 0.01),
-                          child: const Center(
-                              child: Text("Firma: VIA"))),
+                          child: Center(
+                              child: Text("Firma: ${_vehicle.OrgName}"))),
                     ),
                     const SizedBox(
                       height: 50,

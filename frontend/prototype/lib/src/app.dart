@@ -17,12 +17,7 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute<void>(
           settings: routeSettings,
           builder: (BuildContext context) {
-            switch (routeSettings.name) {
-              case UnitSearchView.routeName:
-                return const UnitSearchView();
-              default:
-                return const LoginView();  // Default to LoginView
-            }
+            return const LoginView(); // Default to LoginView
           },
         );
       },
