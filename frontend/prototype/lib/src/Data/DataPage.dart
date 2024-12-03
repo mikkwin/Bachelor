@@ -33,10 +33,10 @@ class _DataPageState extends State<DataPage> {
         await saveData("VehicleReadingsResponseJson", response.body);
         String? cached = await getData("VehicleReadingsResponseJson");
 
-        final decoded = json.decode(response.body);
+        if(cached != null){
+        final decoded = json.decode(cached);
         final readings = decoded['readings'] as List;
         if (decoded != null) {
-
           List<VehicleReadings> temp = [];
 
           readings.forEach((reading) {
@@ -46,22 +46,40 @@ class _DataPageState extends State<DataPage> {
 
             readings.forEach((reading) {
               var x = VehicleReadings(
-                id: reading['id'] ?? 0, // Default to 0 if null
+                id: reading['id'] ?? 0,
+                // Default to 0 if null
                 timestamp: reading['timestamp'] != null
                     ? DateTime.parse(reading['timestamp'])
-                    : DateTime.now(), // Default to current time if null
-                cumulativePower: (reading['cumulativePower'] as num?)?.toDouble() ?? 0.0, // Default to 0.0 if null
-                fullCharges: reading['fullCharges'] ?? 0, // Default to 0 if null
-                hardwareVersion: (reading['hardwareVersion'] as num?)?.toDouble() ?? 0.0, // Default to 0.0 if null
-                maxVolt: (reading['maxVolt'] as num?)?.toDouble() ?? 0.0, // Default to 0.0 if null
-                operationalTime: (reading['operationalTime'] as num?)?.toDouble() ?? 0.0, // Default to 0.0 if null
-                overDischarges: (reading['overDischarges'] as num?)?.toDouble() ?? 0.0, // Default to 0.0 if null
+                    : DateTime.now(),
+                // Default to current time if null
+                cumulativePower: (reading['cumulativePower'] as num?)
+                    ?.toDouble() ?? 0.0,
+                // Default to 0.0 if null
+                fullCharges: reading['fullCharges'] ?? 0,
+                // Default to 0 if null
+                hardwareVersion: (reading['hardwareVersion'] as num?)
+                    ?.toDouble() ?? 0.0,
+                // Default to 0.0 if null
+                maxVolt: (reading['maxVolt'] as num?)?.toDouble() ?? 0.0,
+                // Default to 0.0 if null
+                operationalTime: (reading['operationalTime'] as num?)
+                    ?.toDouble() ?? 0.0,
+                // Default to 0.0 if null
+                overDischarges: (reading['overDischarges'] as num?)
+                    ?.toDouble() ?? 0.0,
+                // Default to 0.0 if null
                 state: reading['state'] != null
                     ? VehicleStatus.active
-                    : VehicleStatus.inactive, // Default to a fallback state
-                softwareVersion: (reading['softwareVersion'] as num?)?.toDouble() ?? 0.0, // Default to 0.0 if null
-                panelCurrent: (reading['panelCurrent'] as num?)?.toDouble() ?? 0.0, // Default to 0.0 if null
-                panelVoltage: (reading['panelVoltage'] as num?)?.toDouble() ?? 0.0, // Default to 0.0 if null
+                    : VehicleStatus.inactive,
+                // Default to a fallback state
+                softwareVersion: (reading['softwareVersion'] as num?)
+                    ?.toDouble() ?? 0.0,
+                // Default to 0.0 if null
+                panelCurrent: (reading['panelCurrent'] as num?)?.toDouble() ??
+                    0.0,
+                // Default to 0.0 if null
+                panelVoltage: (reading['panelVoltage'] as num?)?.toDouble() ??
+                    0.0, // Default to 0.0 if null
               );
 
               temp.add(x);
@@ -70,9 +88,9 @@ class _DataPageState extends State<DataPage> {
           });
 
 
+          chartKey.currentState?.addReadings(temp, 0); // Add readings to the graph
 
-            chartKey.currentState?.addReadings(temp); // Add readings to the graph
-
+        }
         }
         return json.decode(response.body);
       } else {
@@ -93,9 +111,7 @@ class _DataPageState extends State<DataPage> {
       ),
       body: Column(
         children: [
-          Expanded(
-            child: LineChartWidget(key: chartKey), // Graph widget
-          ),
+
           Expanded(
             child: FutureBuilder<Map<String, dynamic>>(
               future: fetchData(),
@@ -146,6 +162,10 @@ class _DataPageState extends State<DataPage> {
                 }
               },
             ),
+
+          ),
+          Expanded(
+            child: LineChartWidget(key: chartKey), // Graph widget
           ),
         ],
       ),
