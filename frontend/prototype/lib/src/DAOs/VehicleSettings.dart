@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 
-class VehicleSetting {
+class VehicleSettings {
   int serialId;
   String imei;
   double s010a;
@@ -23,7 +23,7 @@ class VehicleSetting {
   double e013;
   double e014;
 
-  VehicleSetting({
+  VehicleSettings({
     required this.serialId,
     required this.imei,
     required this.s010a,
@@ -73,8 +73,8 @@ class VehicleSetting {
   }
 
   // Factory constructor to create a VehicleSetting object from a map
-  factory VehicleSetting.fromMap(Map<String, dynamic> map) {
-    return VehicleSetting(
+  factory VehicleSettings.fromMap(Map<String, dynamic> map) {
+    return VehicleSettings(
       serialId: map['serialId'],
       imei: map['imei'],
       s010a: map['s010a'],
@@ -102,6 +102,6 @@ class VehicleSetting {
   String toJson() => json.encode(toMap());
 
   // Factory constructor to create object from JSON string
-  factory VehicleSetting.fromJson(String source) =>
-      VehicleSetting.fromMap(json.decode(source));
+  factory VehicleSettings.fromJson(String source) =>
+      VehicleSettings.fromMap(json.decode(source));
 }
