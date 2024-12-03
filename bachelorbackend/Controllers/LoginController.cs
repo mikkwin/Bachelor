@@ -21,9 +21,7 @@ public class LoginController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<string>> Login(string username, string password)
     {
-		//until we need it
-		return Ok("ye");
-
+        
         string currentToken = _loginService.Login(username, password).Result;
         if (currentToken != "")
         {

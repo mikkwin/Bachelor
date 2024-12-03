@@ -77,7 +77,7 @@ public class DataController : ControllerBase
     public Task<VehicleInfo> getVehicle(int imei, string currentToken)
     {
         
-        VehicleInfo vehicleInfo = _dataService.getVehicleInfo(imei);
+        VehicleInfo vehicleInfo = _dataService.getVehicleInfo(imei, currentToken).Result;
 
         return Task.FromResult(vehicleInfo);
     }

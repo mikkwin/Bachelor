@@ -96,8 +96,19 @@ public class DataService : IDataService
     {
         List<Vehicle> vehicles = new List<Vehicle>();
         
-        for (int i = offset; i < amount; i++)
+        for (int i = offset; i < offset+amount; i++)
         {
+            Vehicle vehicle = new Vehicle()
+            {
+                Id = i,
+                IMEI = 00000000000000 + i,
+                LicensePlate = $"EG{i}979",
+                OrgName = $"Org{i}",
+                VehicleName = $"Vehicle{i}",
+                CompanyCVR = $"Company{i}",
+                LastTechnicianSearch = DateTime.Now.DayOfYear,
+            };
+            vehicles.Add(vehicle);
         }
 
         return vehicles;
@@ -107,10 +118,10 @@ public class DataService : IDataService
     public async Task<List<Vehicle>> vehicleSearch(string input, int filter, string currentToken, int offset, int amount)
     {
         
-        
-        
-        
         List<Vehicle> vehicles = new List<Vehicle>();
+
+        vehicles = generateVehicleSearch(offset, amount);
+        return vehicles;
 
         IQueryable<Vehicle> query = _context.Vehicles;
 
