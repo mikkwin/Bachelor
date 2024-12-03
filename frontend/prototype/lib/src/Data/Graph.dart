@@ -113,7 +113,6 @@ class LineChartWidgetState extends State<LineChartWidget> {
               DateFormat('HH:mm').format(date), // Show only time
               style: const TextStyle(fontSize: 10),
               textAlign: TextAlign.center,
-              
             ),
           );
         },
