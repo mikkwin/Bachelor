@@ -48,7 +48,7 @@ public class DataController : ControllerBase
         
     }
     
-*/    
+    
 
     [HttpGet("GetVehicle")]
     [AllowAnonymous]
@@ -59,12 +59,24 @@ public class DataController : ControllerBase
         return info;
     }
 
-
-    
+*/
     [HttpGet("VehicleSearch")]
+    [AllowAnonymous]
+    public async Task<List<Vehicle>> searchVehicle(string query, int filter, string currentToken, int offset, int amount)
+    {
+        List<Vehicle> vehicles = new List<Vehicle>();
+
+        vehicles = await _dataService.vehicleSearch(query, filter, currentToken, offset, amount);
+
+        return await Task.FromResult(vehicles);
+    }
+    
+    
+    [HttpGet("GetVehicle")]
     [AllowAnonymous]
     public Task<VehicleInfo> getVehicle(int imei, string currentToken)
     {
+        
         VehicleInfo vehicleInfo = _dataService.getVehicleInfo(imei, currentToken).Result;
 
         return Task.FromResult(vehicleInfo);
