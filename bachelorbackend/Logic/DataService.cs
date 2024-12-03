@@ -92,7 +92,7 @@ public class DataService : IDataService
         return vehicles;
     }
 
-    public async Task<ActionResult> vehicleSearch(string input, int filter, string currentToken)
+    public async Task<List<Vehicle>> vehicleSearch(string input, int filter, string currentToken)
     {
         List<Vehicle> vehicles = new List<Vehicle>();
 
@@ -100,27 +100,27 @@ public class DataService : IDataService
         {
             case 1:
                 vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.OrgName, input)) // Case-insensitive search
+                    .Where(vehicle => EF.Functions.Like(vehicle.OrgName, input)) 
                     .ToListAsync();
                 break;
             case 2:
                 vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.LicensePlate, input)) // Case-insensitive search
+                    .Where(vehicle => EF.Functions.Like(vehicle.LicensePlate, input)) 
                     .ToListAsync();
                 break;
             case 3:
                 vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.VehicleName, input)) // Case-insensitive search
+                    .Where(vehicle => EF.Functions.Like(vehicle.VehicleName, input)) 
                     .ToListAsync();
                 break;
             case 4:
                 vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like("" + vehicle.IMEI, input)) // Case-insensitive search
+                    .Where(vehicle => EF.Functions.Like("" + vehicle.IMEI, input)) 
                     .ToListAsync();
                 break;
             case 5:
                 vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.CompanyCVR, input)) // Case-insensitive search
+                    .Where(vehicle => EF.Functions.Like(vehicle.CompanyCVR, input))
                     .ToListAsync();
                 break;
 
@@ -128,10 +128,80 @@ public class DataService : IDataService
 
         if (vehicles.Count == 0)
         {
-            return new EmptyResult();
+            return vehicles;
         }
 
-        return new OkObjectResult(vehicles);
+        return vehicles;
+    }
+
+    public async Task<bool> createSkaderapport(Skaderapport skaderapport, string currentToken)
+    {
+        if (checkCurrentToken(currentToken))
+        {
+            try
+            {
+                await _context.Skaderapports.AddAsync(skaderapport);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    public async Task<Skaderapport> getLatestSkadeRapport(int imei, string currentToken)
+    {
+        if (checkCurrentToken(currentToken))
+        {
+            try
+            {
+                if (_context.Skaderapports.Any(u => u.IMEINumber == ""+imei))
+                {
+                    Skaderapport temp = (await _context.Skaderapports.FirstOrDefaultAsync(u => u.IMEINumber == ""+imei))!;
+                    return temp;
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public async Task<bool> updateSkadeRapport(Skaderapport skaderapport, string currentToken)
+    {
+        if (checkCurrentToken(currentToken))
+        {
+            try
+            {
+                if (_context.Skaderapports.Any(u => u.IMEINumber == skaderapport.IMEINumber))
+                {
+                    Skaderapport temp =
+                        (await _context.Skaderapports.FirstOrDefaultAsync(u => u.IMEINumber == skaderapport.IMEINumber))
+                        !;
+                    temp.A = skaderapport.A;
+                    temp.B = skaderapport.B;
+                    temp.C = skaderapport.C;
+                    temp.D = skaderapport.D;
+                    temp.LastEditedDateTime = DateTime.Now;
+                    temp.TeknikerId = skaderapport.TeknikerId;
+
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        return false;
     }
 
 

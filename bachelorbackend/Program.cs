@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using bachelorbackend.Data;
+using bachelorbackend.Logic;
 using bachelorbackend.Data.DB;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IDataService, DataService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<ISettingsService, SettingsService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

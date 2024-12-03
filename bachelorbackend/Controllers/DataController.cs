@@ -48,7 +48,7 @@ public class DataController : ControllerBase
         
     }
     
-    
+*/    
 
     [HttpGet("GetVehicle")]
     [AllowAnonymous]
@@ -59,7 +59,7 @@ public class DataController : ControllerBase
         return info;
     }
 
-*/
+
     
     [HttpGet("VehicleSearch")]
     [AllowAnonymous]
