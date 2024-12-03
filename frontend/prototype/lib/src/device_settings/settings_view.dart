@@ -1,15 +1,23 @@
 import 'dart:ffi';
 import 'package:flutter/material.dart';
+import 'package:prototype/src/DAOs/VehicleInfo.dart';
 import 'package:prototype/src/DAOs/VehicleSettings.dart';
 import 'package:prototype/src/device_settings/settings_textState.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:prototype/src/DAOs/enums/ErrorCode.dart';
 
 class settingsView extends StatelessWidget {
   final VehicleSettings vehicleSettings;
+  final String token;
+   
+
   const settingsView({
     super.key, 
-    required this.vehicleSettings
+    required this.vehicleSettings,
+    required this.token
+    
      });
   
   static const routeName = '/Device_settings';
@@ -17,11 +25,12 @@ class settingsView extends StatelessWidget {
 
 
 
+
   @override
   Widget build(BuildContext context) {
    
 
-
+      print(vehicleSettings.imei);
     Future<void> sendVehicleSetting(VehicleSettings setting, String string) async {
       try {
         final url = Uri.parse("https://140.82.33.21:5001/Settings/UpdateSettings");
@@ -222,9 +231,11 @@ SettingsTextstate(
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
+
+                 
                 VehicleSettings VeToSend = VehicleSettings(serialId: vehicleSettings.serialId, imei: vehicleSettings.imei, s010a: vehicleSettings.s010a, e003:vehicleSettings.e003, e004: vehicleSettings.e004, e005: vehicleSettings.e005, e006: vehicleSettings.e006, e007: vehicleSettings.e007, e008: vehicleSettings.e008, e009: vehicleSettings.e009, e00a: vehicleSettings.e00a, e00b: vehicleSettings.e00b, e00c: vehicleSettings.e00c, e00d: vehicleSettings.e00d, e00e: vehicleSettings.e00e, e010: vehicleSettings.e010, e011: vehicleSettings.e011, e012: vehicleSettings.e012, e013: vehicleSettings.e013, e014: vehicleSettings.e014);
-                 sendVehicleSetting(VeToSend, "fisk");
-                  //Navigator.pop(context);
+                SendDataMeth(VeToSend);
+                  Navigator.pop(context);
                 },
                 child: Text('Gem ændring'),
               ),
@@ -235,8 +246,35 @@ SettingsTextstate(
       ),
     );
 
-    
     }
+
+
+ Future<void> saveData(String key, String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+  }
+
+  static Future<String?> getData(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
+  }
+
+    void SendDataMeth(VehicleSettings setting) async
+    {
+       final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) 
+      {
+         String? cached = await getData("VehicleReadingsResponseJson");
+         VehicleInfo vehicleInfo = VehicleInfo.fromJson(cached!);
+          List<ErrorCode> LErrors = [ErrorCode.NO_ERR]; 
+         vehicleInfo.Errors = LErrors;
+
+       String vehicleInfoToSend = vehicleInfo.toJson();
+
+        await saveData("VehicleReadingsResponseJson", vehicleInfoToSend);
+      }
+    }
+
     double checkDouble(String string){
       if(string.contains(".")){
         print(double.parse(string));
@@ -247,7 +285,9 @@ SettingsTextstate(
         String sDouble = "$string.0";
         print(double.parse(sDouble));
         return double.parse(sDouble);
-        
+                
       }
+    }
   }
-}
+
+

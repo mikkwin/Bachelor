@@ -80,7 +80,7 @@ class _UnitPageViewState extends State<UnitPageView> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                         settingsView(vehicleSettings: VeToSend)));
+                                         settingsView(vehicleSettings: VeToSend, token: widget.token)));
                           },
                           child: const Icon(Icons.settings))
                     ]),

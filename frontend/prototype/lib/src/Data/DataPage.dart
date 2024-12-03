@@ -29,10 +29,13 @@ class _DataPageState extends State<DataPage> {
 
   Future<Map<String, dynamic>> fetchData() async {
     try {
+      String? cached = await getData("VehicleReadingsResponseJson");
+      if(cached == null){
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         await saveData("VehicleReadingsResponseJson", response.body);
         String? cached = await getData("VehicleReadingsResponseJson");
+      }
 
         if(cached != null){
         final decoded = json.decode(cached);
@@ -94,6 +97,8 @@ class _DataPageState extends State<DataPage> {
         }
         }
         return json.decode(response.body);
+        
+        
       } else {
         throw Exception("DATA_FEJL");
       }
