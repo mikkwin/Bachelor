@@ -59,7 +59,7 @@ public class DataService : IDataService
 
         for (int i = 0; i < 2; i++)
         {
-            if (DateTime.Now.Second % 10 == 0)
+            if (DateTime.Now.Second % 3 == 0)
             {
                 codes.Add(ErrorCode.CTRL_TEMP_HIGH);
             }

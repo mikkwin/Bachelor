@@ -33,6 +33,8 @@ public class SettingsController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult> updateSettings([FromBody] VehicleSetting settings, string currentToken)
     {
+        Console.WriteLine(settings.ToString());
+        
         if (await _settingsService.updateSettings(int.Parse(settings.IMEI), settings, currentToken))
         {
             return Ok();
