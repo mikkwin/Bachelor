@@ -25,15 +25,15 @@ class _UnitSearchButton extends State<UnitSearchButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onPressed, // Call the onPressed function when tapped
+      onTap: widget.onPressed,
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(width: 1),
           borderRadius: BorderRadius.circular(12),
         ),
-        padding: const EdgeInsets.all(10), // Add padding for better touch area
+        padding: const EdgeInsets.all(10),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Ensure the column takes up only necessary space
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(widget.initialText),
             widget.icon,

@@ -73,7 +73,7 @@ class PostMortem extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const UnitSearchView()));
+                        builder: (context) => const UnitSearchView(token: "")));
                     provider.clearChanges();
               },
               child: const Text('Gem'),

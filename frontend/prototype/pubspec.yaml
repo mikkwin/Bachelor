@@ -40,3 +40,8 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+
+  fonts:
+    - family: Audiowide
+      fonts:
+        - asset: fonts/Fugaz_One/Fugaz_One/FugazOne-Regular.ttf
