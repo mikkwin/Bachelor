@@ -92,51 +92,131 @@ public class DataService : IDataService
         return vehicles;
     }
 
-    public async Task<ActionResult> vehicleSearch(string input, int filter, string currentToken)
+    private List<Vehicle> generateVehicleSearch(int offset, int amount)
     {
         List<Vehicle> vehicles = new List<Vehicle>();
+        
+        for (int i = offset; i < amount; i++)
+        {
+        }
+
+        return vehicles;
+
+    }
+
+    public async Task<List<Vehicle>> vehicleSearch(string input, int filter, string currentToken, int offset, int amount)
+    {
+        
+        
+        
+        
+        List<Vehicle> vehicles = new List<Vehicle>();
+
+        IQueryable<Vehicle> query = _context.Vehicles;
 
         switch (filter)
         {
-            case 1:
-                vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.OrgName, input)) // Case-insensitive search
-                    .ToListAsync();
+            case 1: 
+                query = query.Where(vehicle => EF.Functions.Like(vehicle.OrgName, input));
                 break;
             case 2:
-                vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.LicensePlate, input)) // Case-insensitive search
-                    .ToListAsync();
+                query = query.Where(vehicle => EF.Functions.Like(vehicle.LicensePlate, input));
                 break;
             case 3:
-                vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.VehicleName, input)) // Case-insensitive search
-                    .ToListAsync();
+                query = query.Where(vehicle => EF.Functions.Like(vehicle.VehicleName, input));
                 break;
             case 4:
-                vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like("" + vehicle.IMEI, input)) // Case-insensitive search
-                    .ToListAsync();
+                query = query.Where(vehicle => EF.Functions.Like("" + vehicle.IMEI, input));
                 break;
             case 5:
-                vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.CompanyCVR, input)) // Case-insensitive search
-                    .ToListAsync();
+                query = query.Where(vehicle => EF.Functions.Like(vehicle.CompanyCVR, input));
                 break;
-
         }
 
-        if (vehicles.Count == 0)
+        // Apply offset and amount for pagination
+        vehicles = await query
+            .Skip(offset)
+            .Take(amount)
+            .ToListAsync();
+
+        return vehicles;
+    }
+
+
+    public async Task<bool> createSkaderapport(Skaderapport skaderapport, string currentToken)
+    {
+        if (checkCurrentToken(currentToken))
         {
-            return new EmptyResult();
+            try
+            {
+                await _context.Skaderapports.AddAsync(skaderapport);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
-        return new OkObjectResult(vehicles);
+        return false;
+    }
+
+    public async Task<Skaderapport> getLatestSkadeRapport(int imei, string currentToken)
+    {
+        if (checkCurrentToken(currentToken))
+        {
+            try
+            {
+                if (_context.Skaderapports.Any(u => u.IMEINumber == ""+imei))
+                {
+                    Skaderapport temp = (await _context.Skaderapports.FirstOrDefaultAsync(u => u.IMEINumber == ""+imei))!;
+                    return temp;
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public async Task<bool> updateSkadeRapport(Skaderapport skaderapport, string currentToken)
+    {
+        if (checkCurrentToken(currentToken))
+        {
+            try
+            {
+                if (_context.Skaderapports.Any(u => u.IMEINumber == skaderapport.IMEINumber))
+                {
+                    Skaderapport temp =
+                        (await _context.Skaderapports.FirstOrDefaultAsync(u => u.IMEINumber == skaderapport.IMEINumber))
+                        !;
+                    temp.A = skaderapport.A;
+                    temp.B = skaderapport.B;
+                    temp.C = skaderapport.C;
+                    temp.D = skaderapport.D;
+                    temp.LastEditedDateTime = DateTime.Now;
+                    temp.TeknikerId = skaderapport.TeknikerId;
+
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        return false;
     }
 
 
     public async Task<VehicleInfo> getVehicleInfo(int imei, string currentToken)
     {
+
         if(checkCurrentToken(currentToken))
         {
             if (_context.VehicleInfos.Any(u => u.IMEI == imei))
