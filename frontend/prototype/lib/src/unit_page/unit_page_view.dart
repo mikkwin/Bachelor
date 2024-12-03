@@ -4,6 +4,7 @@ import 'package:prototype/src/device_settings/settings_view.dart';
 import 'package:prototype/src/http_requests.dart';
 import 'package:prototype/src/post_mortem/post_mortem.dart';
 import 'package:prototype/src/Data/DataPage.dart';
+import 'package:prototype/src/DAOs/VehicleSettings.dart';
 
 class UnitPageView extends StatefulWidget {
   final String deviceImei;
@@ -12,6 +13,7 @@ class UnitPageView extends StatefulWidget {
   const UnitPageView(
       {super.key, required this.token, required this.deviceImei});
   static const routeName = '/unit_page';
+  
 
   @override
   createState() => _UnitPageViewState();
@@ -46,6 +48,7 @@ class _UnitPageViewState extends State<UnitPageView> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final VehicleSettings VeToSend = VehicleSettings(serialId: 12345, imei: "123456789123456", s010a: 1, e003:2, e004: 3, e005: 4, e006: 5, e007: 6, e008: 7, e009: 8, e00a: 9, e00b: 10, e00c: 11, e00d: 12, e00e: 13, e010: 14, e011: 15, e012: 16, e013: 17, e014: 18);
 
     return Scaffold(
         appBar: AppBar(),
@@ -77,7 +80,7 @@ class _UnitPageViewState extends State<UnitPageView> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const settingsView()));
+                                         settingsView(vehicleSettings: VeToSend)));
                           },
                           child: const Icon(Icons.settings))
                     ]),

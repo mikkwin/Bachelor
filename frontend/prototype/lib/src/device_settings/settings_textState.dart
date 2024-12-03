@@ -45,7 +45,9 @@ class _SettingsTextState extends State<SettingsTextstate> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      keyboardType: TextInputType.number, // Show numeric keyboard
       controller: _controller,
+      
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         labelText: widget.label,

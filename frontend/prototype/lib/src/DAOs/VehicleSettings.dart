@@ -46,7 +46,7 @@ class VehicleSettings {
     required this.e014,
   });
 
-  // You can also add a method to convert the object to a map (for use in JSON serialization)
+  
   Map<String, dynamic> toMap() {
     return {
       'serialId': serialId,

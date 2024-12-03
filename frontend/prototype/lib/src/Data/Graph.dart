@@ -5,7 +5,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:prototype/src/DAOs/VehicleReadings.dart';
 import 'package:intl/intl.dart';
 
-
 class LineChartWidget extends StatefulWidget {
   const LineChartWidget({Key? key}) : super(key: key);
 
@@ -21,9 +20,9 @@ class LineChartWidgetState extends State<LineChartWidget> {
     setState(() {
       _dataPoints.clear();
       _xLabels.clear();
+      readings.removeLast();
 
       for (var reading in readings) {
-        // Extract timestamp and panel voltage
         double x = reading.timestamp.millisecondsSinceEpoch.toDouble();
         double y = 0.0;
 
@@ -57,71 +56,96 @@ class LineChartWidgetState extends State<LineChartWidget> {
             throw Exception("Invalid filter");
         }
 
+        // Skip invalid values
+        if (y.isNaN || y.isInfinite || y <= 0) continue;
 
-
-        // Store the timestamp for formatting later
-        _xLabels.add(reading.timestamp); // Save DateTime for labels
+        _xLabels.add(reading.timestamp);
         _dataPoints.add(FlSpot(x, y));
+      }
 
+      // Ensure the points are sorted by x (timestamp)
+      _dataPoints.sort((a, b) => a.x.compareTo(b.x));
+
+      // Remove duplicate points (if first and last points match)
+      if (_dataPoints.isNotEmpty && _dataPoints.first.x == _dataPoints.last.x) {
+        _dataPoints.removeLast();
       }
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
-
     return Padding(
       padding: const EdgeInsets.all(16.0),
-        child: Center(
+      child: Center(
         child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8, // Adjust width to 80% of screen
-    child: LineChart(
-        LineChartData(
-          lineBarsData: [
-            LineChartBarData(
-              spots: _dataPoints,
-              isCurved: true,
-              barWidth: 2,
-              belowBarData: BarAreaData(show: false),
-              preventCurveOverShooting: true,
-              isStrokeCapRound: true,
-              isStepLineChart: false,
+          width: MediaQuery.of(context).size.width * 0.8,
+          child: LineChart(
+            LineChartData(
+  lineBarsData: [
+    LineChartBarData(
+      spots: _dataPoints,
+      isCurved: true,
+      barWidth: 2,
+      belowBarData: BarAreaData(show: false),
+      preventCurveOverShooting: true,
+      isStrokeCapRound: true,
+      isStepLineChart: false,
+      dotData: FlDotData(show: true),
+    ),
+  ],
+  minX: _dataPoints.isNotEmpty ? _dataPoints.first.x : 0.0,
+  maxX: _dataPoints.isNotEmpty ? _dataPoints.last.x : 1.0,
+  titlesData: FlTitlesData(
+    topTitles: AxisTitles(
+      sideTitles: SideTitles(showTitles: false),
+    ),
+    bottomTitles: AxisTitles(
+      sideTitles: SideTitles(
+        showTitles: true,
+        reservedSize: 30,
+        interval: 18000000000, // Show labels every interval time
+        getTitlesWidget: (value, _) {
+          DateTime date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+          return Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Text(
+              DateFormat('HH:mm').format(date), // Show only time
+              style: const TextStyle(fontSize: 10),
+              textAlign: TextAlign.center,
             ),
-          ],
-          titlesData: FlTitlesData(
-            topTitles: AxisTitles( // Remove top titles
-              sideTitles: SideTitles(showTitles: false),
-            ),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                interval: 86400000,
-                getTitlesWidget: (value, _) {
-                  DateTime date =
-                  DateTime.fromMillisecondsSinceEpoch(value.toInt());
-                  return Text(
-                    DateFormat('dd-MM-yyyy HH:mm').format(date),
-                    style: const TextStyle(fontSize: 10),
-                  );
-                },
-              ),
-            ),
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-            rightTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: true,
-              ),
-            ),
-          ),
-          borderData: FlBorderData(show: true),
-        ),
+          );
+        },
       ),
     ),
+    leftTitles: AxisTitles(
+      sideTitles: SideTitles(showTitles: false),
     ),
+    rightTitles: AxisTitles(
+      sideTitles: SideTitles(
+        showTitles: true,
+        reservedSize: 40, // Space for better formatting
+        interval: 200, // Adjust interval between labels
+        getTitlesWidget: (value, _) {
+          return Text(
+            value.toStringAsFixed(0), // Format numbers as integers
+            style: const TextStyle(fontSize: 10),
+          );
+        },
+      ),
+    ),
+  ),
+  borderData: FlBorderData(show: true),
+  gridData: FlGridData(
+    show: true,
+    drawHorizontalLine: true,
+    drawVerticalLine: true,
+  ),
+)
+
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,44 +1,31 @@
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:prototype/src/DAOs/VehicleSettings.dart';
 import 'package:prototype/src/device_settings/settings_textState.dart';
-import 'package:prototype/src/device_settings/temp_provider.dart';
-import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class settingsView extends StatelessWidget {
-  const settingsView({super.key});
-
+  final VehicleSettings vehicleSettings;
+  const settingsView({
+    super.key, 
+    required this.vehicleSettings
+     });
+  
   static const routeName = '/Device_settings';
-  final String url = "https://localhost:5001/Settings/ChangeSettings?";
+  final String url = "https://140.82.33.21:5001/Settings/ChangeSettings?";
 
 
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<TempProvider>(context);
-    String setting10a = provider.textbox10a ;
-    String setting3 = provider.textbox3 ;
-    String setting4 = provider.textbox4 ;
-    String setting5 = provider.textbox5 ;
-    String setting6 = provider.textbox6 ;
-    String setting7 = provider.textbox7 ;
-    String setting8 = provider.textbox8 ;
-    String setting9 = provider.textbox9 ;
-    String settingA = provider.textboxA ;
-    String settingB = provider.textboxB ;
-    String settingC = provider.textboxC ;
-    String settingD = provider.textboxD ;
-    String settingE = provider.textboxE ;
-    String setting10 = provider.textbox10 ;
-    String setting11 = provider.textbox11 ;
-    String setting12 = provider.textbox12 ;
+   
 
 
-    Future<void> sendVehicleSetting(VehicleSettings setting) async {
+    Future<void> sendVehicleSetting(VehicleSettings setting, String string) async {
       try {
-        final url = Uri.parse("https://localhost:5001/Settings/ChangeSettings");
-        final response = await http.post(
+        final url = Uri.parse("https://140.82.33.21:5001/Settings/UpdateSettings");
+        final response = await http.patch(
           url,
           headers: {
             "Content-Type": "application/json",
@@ -69,155 +56,198 @@ class settingsView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,  // Align from the top
             children: [
               const SizedBox(height: 10),
-              SettingsTextstate(
-                onTextChange: (text10a) {
-                  provider.saveChanges(text10a, setting3, setting4, setting5, setting6, setting7, setting8, setting9, settingA, settingB, settingC, settingD, settingE, setting10, setting11, setting12, text10a);
-                },
-                label: "010a",
-                initialText: provider.textbox10a,
-                suffixText: "W",
-              ),
+  SettingsTextstate(
+  onTextChange: (text10a) {
+    
+    vehicleSettings.s010a = checkDouble(text10a); // Parse the text to double
+  },
+  label: "010a",
+  initialText: vehicleSettings.s010a.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (text3) {
+    vehicleSettings.e003 = checkDouble(text3); // Parse the text to double
+  },
+  label: "e003",
+  initialText: vehicleSettings.e003.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (text4) {
+    vehicleSettings.e004 = checkDouble(text4); // Parse the text to double
+  },
+  label: "e004",
+  initialText: vehicleSettings.e004.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (text5) {
+    vehicleSettings.e005 = checkDouble(text5); // Parse the text to double
+  },
+  label: "e005",
+  initialText: vehicleSettings.e005.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  
+  onTextChange: (text6) {
+    
+    vehicleSettings.e006 = checkDouble(text6); // Parse the text to double
+  },
+  label: "e006",
+  initialText: vehicleSettings.e006.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (text7) {
+    vehicleSettings.e007 = checkDouble(text7); // Parse the text to double
+  },
+  label: "e007",
+  initialText: vehicleSettings.e007.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (text8) {
+    vehicleSettings.e008 = checkDouble(text8); // Parse the text to double
+  },
+  label: "e008",
+  initialText: vehicleSettings.e008.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (text9) {
+    vehicleSettings.e009 = checkDouble(text9); // Parse the text to double
+  },
+  label: "e009",
+  initialText: vehicleSettings.e009.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (textA) {
+    vehicleSettings.e00a = checkDouble(textA); // Parse the text to double
+  },
+  label: "e00a",
+  initialText: vehicleSettings.e00a.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (textB) {
+    vehicleSettings.e00b = checkDouble(textB); // Parse the text to double
+  },
+  label: "e00b",
+  initialText: vehicleSettings.e00b.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (textC) {
+    vehicleSettings.e00c = checkDouble(textC); // Parse the text to double
+  },
+  label: "e00c",
+  initialText: vehicleSettings.e00c.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (textD) {
+    vehicleSettings.e00d = checkDouble(textD); // Parse the text to double
+  },
+  label: "e00d",
+  initialText: vehicleSettings.e00d.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (textE) {
+    vehicleSettings.e00e = checkDouble(textE); // Parse the text to double
+  },
+  label: "e00e",
+  initialText: vehicleSettings.e00e.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (text10) {
+    vehicleSettings.e010 = checkDouble(text10); // Parse the text to double
+  },
+  label: "e010",
+  initialText: vehicleSettings.e010.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (text11) {
+    vehicleSettings.e011 = checkDouble(text11); // Parse the text to double
+  },
+  label: "e011",
+  initialText: vehicleSettings.e011.toString(),
+  suffixText: "",
+),
+const SizedBox(height: 10),
+
+SettingsTextstate(
+  onTextChange: (text12) {
+    vehicleSettings.e012 = checkDouble(text12); // Parse the text to double
+  },
+  label: "e012",
+  initialText: vehicleSettings.e012.toString(),
+  suffixText: "",
+),
+
+              
               const SizedBox(height: 10),
-              SettingsTextstate(
-                onTextChange: (text3) {
-                  provider.saveChanges(setting10a, text3, setting4, setting5, setting6, setting7, setting8, setting9, settingA, settingB, settingC, settingD, settingE, setting10, setting11, setting12, text3);
-                },
-                label: "e003",
-                initialText: provider.textbox3,
-                suffixText: "",
-              ),
-              const SizedBox(height: 10),
-              SettingsTextstate(
-                onTextChange: (text4) {
-                  provider.saveChanges(setting10a, setting3, text4, setting5, setting6, setting7, setting8, setting9, settingA, settingB, settingC, settingD, settingE, setting10, setting11, setting12, text4);
-                },
-                label: "e004",
-                initialText: provider.textbox4,
-                suffixText: "",
-              ),
-              const SizedBox(height: 10),
-              SettingsTextstate(
-                onTextChange: (text5) {
-                  provider.saveChanges(setting10a, setting3, setting4, text5, setting6, setting7, setting8, setting9, settingA, settingB, settingC, settingD, settingE, setting10, setting11, setting12, text5);
-                },
-                label: "e005",
-                initialText: provider.textbox5,
-                suffixText: "",
-              ),
-              const SizedBox(height: 10),
-              SettingsTextstate(
-                onTextChange: (text6) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, text6, setting7, setting8, setting9, settingA, settingB, settingC, settingD, settingE, setting10, setting11, setting12, text6);
-                },
-                label: "e006",
-                initialText: provider.textbox6,
-                suffixText: "",
-              ),
-              const SizedBox(height: 10),
-              SettingsTextstate(
-                onTextChange: (text7) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, setting6, text7, setting8, setting9, settingA, settingB, settingC, settingD, settingE, setting10, setting11, setting12, text7);
-                },
-                label: "e007",
-                initialText: provider.textbox7,
-                suffixText: "",
-              ),
-              SettingsTextstate(
-                onTextChange: (text8) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, setting6, setting7, text8, setting9, settingA, settingB, settingC, settingD, settingE, setting10, setting11, setting12, text8);
-                },
-                label: "e008",
-                initialText: provider.textbox8,
-                suffixText: "",
-              ),
-              SettingsTextstate(
-                onTextChange: (text9) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, setting6, setting7, setting8, text9, settingA, settingB, settingC, settingD, settingE, setting10, setting11, setting12, text9);
-                },
-                label: "e009",
-                initialText: provider.textbox9,
-                suffixText: "",
-              ),
-              SettingsTextstate(
-                onTextChange: (textA) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, setting6, setting7, setting8, setting9, textA, settingB, settingC, settingD, settingE, setting10, setting11, setting12, textA);
-                },
-                label: "e00a",
-                initialText: provider.textboxA,
-                suffixText: "",
-              ),
-              SettingsTextstate(
-                onTextChange: (textB) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, setting6, setting7, setting8, setting9, settingA, textB, settingC, settingD, settingE, setting10, setting11, setting12, textB);
-                },
-                label: "e00b",
-                initialText: provider.textboxB,
-                suffixText: "",
-              ),
-              SettingsTextstate(
-                onTextChange: (textC) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, setting6, setting7, setting8, setting9, settingA, settingB, textC, settingD, settingE, setting10, setting11, setting12, textC);
-                },
-                label: "e00c",
-                initialText: provider.textboxC,
-                suffixText: "",
-              ),
-              SettingsTextstate(
-                onTextChange: (textD) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, setting6, setting7, setting8, setting9, settingA, settingB, settingC, textD, settingE, setting10, setting11, setting12, textD);
-                },
-                label: "e00d",
-                initialText: provider.textboxD,
-                suffixText: "",
-              ),
-              SettingsTextstate(
-                onTextChange: (textE) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, setting6, setting7, setting8, setting9, settingA, settingB, settingC, settingD, textE, setting10, setting11, setting12, textE);
-                },
-                label: "e00e",
-                initialText: provider.textboxE,
-                suffixText: "",
-              ),
-              SettingsTextstate(
-                onTextChange: (text10) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, setting6, setting7, setting8, setting9, settingA, settingB, settingC, settingD, settingE, text10, setting11, setting12, text10);
-                },
-                label: "e010",
-                initialText: provider.textbox10,
-                suffixText: "",
-              ),
-              SettingsTextstate(
-                onTextChange: (text11) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, setting6, setting7, setting8, setting9, settingA, settingB, settingC, settingD, settingE, setting10, text11, setting12, text11);
-                },
-                label: "e011",
-                initialText: provider.textbox11,
-                suffixText: "",
-              ),
-              SettingsTextstate(
-                onTextChange: (text12) {
-                  provider.saveChanges(setting10a, setting3, setting4, setting5, setting6, setting7, setting8, setting9, settingA, settingB, settingC, settingD, settingE, setting10, setting11, text12, text12);
-                },
-                label: "e012",
-                initialText: provider.textbox12,
-                suffixText: "",
-              ),
-              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  print(setting10a);
-                  print(settingC);
-
-                  Navigator.pop(context);
+                VehicleSettings VeToSend = VehicleSettings(serialId: vehicleSettings.serialId, imei: vehicleSettings.imei, s010a: vehicleSettings.s010a, e003:vehicleSettings.e003, e004: vehicleSettings.e004, e005: vehicleSettings.e005, e006: vehicleSettings.e006, e007: vehicleSettings.e007, e008: vehicleSettings.e008, e009: vehicleSettings.e009, e00a: vehicleSettings.e00a, e00b: vehicleSettings.e00b, e00c: vehicleSettings.e00c, e00d: vehicleSettings.e00d, e00e: vehicleSettings.e00e, e010: vehicleSettings.e010, e011: vehicleSettings.e011, e012: vehicleSettings.e012, e013: vehicleSettings.e013, e014: vehicleSettings.e014);
+                 sendVehicleSetting(VeToSend, "fisk");
+                  //Navigator.pop(context);
                 },
                 child: Text('Gem ændring'),
               ),
+              const SizedBox(height: 10),
             ],
           ),
         ),
       ),
     );
 
-
+    
+    }
+    double checkDouble(String string){
+      if(string.contains(".")){
+        print(double.parse(string));
+        return double.parse(string);
+        
+      }
+      else{
+        String sDouble = "$string.0";
+        print(double.parse(sDouble));
+        return double.parse(sDouble);
+        
+      }
   }
 }

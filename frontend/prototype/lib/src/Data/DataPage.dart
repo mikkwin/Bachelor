@@ -6,6 +6,7 @@ import 'package:prototype/src/DAOs/enums/VehicleStatus.dart';
 import 'package:prototype/src/Data/Graph.dart';
 import 'package:prototype/src/Data/data_cache.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class DataPage extends StatefulWidget {
   @override
@@ -114,54 +115,60 @@ class _DataPageState extends State<DataPage> {
 
           Expanded(
             child: FutureBuilder<Map<String, dynamic>>(
-              future: fetchData(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!['readings'].isEmpty) {
-                  return const Center(child: Text('No data available.'));
-                } else {
-                  var firstReading = snapshot.data!['readings'][0];
+  future: fetchData(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (snapshot.hasError) {
+      return Center(child: Text('Error: ${snapshot.error}'));
+    } else if (!snapshot.hasData || snapshot.data!['readings'].isEmpty) {
+      return const Center(child: Text('No data available.'));
+    } else {
+      var firstReading = snapshot.data!['readings'][0];
 
-                  String timestamp = firstReading['timestamp'] ?? 'N/A';
-                  int overdischarges = firstReading['overdischarges'] ?? 0;
-                  double panelCurrent = firstReading['panelCurrent']?.toDouble() ?? 0.0;
-                  double panelVoltage = firstReading['panelVoltage']?.toDouble() ?? 0.0;
+      // Format the timestamp
+      String timestamp = firstReading['timestamp'] != null
+          ? DateFormat('dd-MM-yyyy HH:mm').format(DateTime.parse(firstReading['timestamp']))
+          : 'N/A';
 
-                  return ListView(
-                    padding: const EdgeInsets.all(20),
-                    children: <Widget>[
-                      ListTile(
-                        leading: const Icon(Icons.battery_5_bar),
-                        title: Text("Sidste data: $timestamp"),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.warning_amber_outlined),
-                        title: Text("Overdischarges: $overdischarges"),
-                      ),
-                      const ListTile(
-                        leading: Icon(Icons.battery_full),
-                        title: Text("Batteri Amp: 100"),
-                      ),
-                      const ListTile(
-                        leading: Icon(Icons.battery_charging_full),
-                        title: Text("Batteri Volt: 100"),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.solar_power),
-                        title: Text("Panel Amp: $panelCurrent"),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.flash_on),
-                        title: Text("Panel Volt: $panelVoltage"),
-                      ),
-                    ],
-                  );
-                }
-              },
-            ),
+      int overdischarges = firstReading['overdischarges'] ?? 0;
+      double panelCurrent = firstReading['panelCurrent']?.toDouble() ?? 0.0;
+      double panelVoltage = firstReading['panelVoltage']?.toDouble() ?? 0.0;
+
+      return ListView(
+        padding: const EdgeInsets.all(20),
+        children: <Widget>[
+          ListTile(
+            leading: const Icon(Icons.battery_5_bar),
+            title: Text("Sidste data: $timestamp"),
+          ),
+          ListTile(
+            leading: const Icon(Icons.warning_amber_outlined),
+            title: Text("Overdischarges: $overdischarges"),
+          ),
+          const ListTile(
+            leading: Icon(Icons.battery_full),
+            title: Text("Batteri Amp: 100"),
+          ),
+          const ListTile(
+            leading: Icon(Icons.battery_charging_full),
+            title: Text("Batteri Volt: 100"),
+          ),
+          ListTile(
+            leading: const Icon(Icons.solar_power),
+            title: Text("Panel Amp: ${(panelCurrent ?? 0.0).toStringAsFixed(3)}"),
+          ),
+          
+          ListTile(
+            leading: const Icon(Icons.flash_on),
+            title: Text("Panel Volt: $panelVoltage"),
+          ),
+        ],
+      );
+    }
+  },
+)
+
 
           ),
           Expanded(
