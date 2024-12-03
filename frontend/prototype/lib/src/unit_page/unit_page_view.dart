@@ -4,7 +4,7 @@ import 'package:prototype/src/post_mortem/post_mortem.dart';
 import 'package:prototype/src/Data/DataPage.dart';
 
 class UnitPageView extends StatelessWidget {
-  const UnitPageView({super.key});
+  const UnitPageView({super.key, required token, required device_id});
 
   static const routeName = '/unit_page';
 

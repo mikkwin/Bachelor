@@ -1,13 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:prototype/src/DAOs/Vehicle.dart';
 import 'package:prototype/src/login/login_view.dart';
 import 'package:prototype/src/unit_page/unit_page_view.dart';
 import 'package:prototype/src/unit_search/unit_search_button.dart';
+import 'package:prototype/src/unit_search/unit_search_http.dart';
+
+int maxOffset = 20;
 
 /// Displays a list of SampleItems.
-class UnitSearchView extends StatelessWidget {
-  const UnitSearchView({super.key});
+class UnitSearchView extends StatefulWidget {
+  final String token;
 
+  const UnitSearchView({super.key, required this.token});
   static const routeName = '/unit_search';
+
+  @override
+  createState() => _UnitSearchViewState();
+}
+
+class _UnitSearchViewState extends State<UnitSearchView> {
+  final ScrollController _scrollController = ScrollController();
+  final List<Vehicle> _data = [];
+  bool _isLoading = false;
+  int _offset = 0;
+  int _filter = 4;
+  String query = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    _fetchInitialData();
+  }
+
+  Future<void> _fetchInitialData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      List<Vehicle> initialData =
+          await getDevices(_offset, maxOffset, _filter, widget.token, query);
+      setState(() {
+        _data.addAll(initialData);
+      });
+    } catch (e) {
+      print("Error fetching devices: $e");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 200 &&
+        !_isLoading) {
+      _loadMoreData();
+    }
+  }
+
+  Future<void> _loadMoreData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    setState(() async {
+      _offset += maxOffset;
+      _data.addAll(
+          await getDevices(_offset, maxOffset, _filter, widget.token, query));
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +113,8 @@ class UnitSearchView extends StatelessWidget {
                       initialText: "Imei",
                       icon: const Icon(Icons.fingerprint),
                       onPressed: () {
-                        _showDialog(context); // Trigger the dialog when button is pressed
+                        _showDialog(
+                            context); // Trigger the dialog when button is pressed
                       },
                     ),
                   ),
@@ -52,7 +124,8 @@ class UnitSearchView extends StatelessWidget {
                       initialText: "Firma",
                       icon: const Icon(Icons.home),
                       onPressed: () {
-                        _showDialog(context); // Trigger the dialog when button is pressed
+                        _showDialog(
+                            context); // Trigger the dialog when button is pressed
                       },
                     ),
                   ),
@@ -62,7 +135,8 @@ class UnitSearchView extends StatelessWidget {
                       initialText: "Plade",
                       icon: const Icon(Icons.local_shipping),
                       onPressed: () {
-                        _showDialog(context); // Trigger the dialog when button is pressed
+                        _showDialog(
+                            context); // Trigger the dialog when button is pressed
                       },
                     ),
                   ),
@@ -72,7 +146,8 @@ class UnitSearchView extends StatelessWidget {
                       initialText: "Online",
                       icon: const Icon(Icons.link),
                       onPressed: () {
-                        _showDialog(context); // Trigger the dialog when button is pressed
+                        _showDialog(
+                            context); // Trigger the dialog when button is pressed
                       },
                     ),
                   ),
@@ -89,51 +164,25 @@ class UnitSearchView extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
-                    children: const <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text("IMEI: 123456789012345"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text("IMEI: 123456789012345"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text("IMEI: 123456789012345"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text("IMEI: 123456789012345"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text("IMEI: 123456789012345"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text("IMEI: 123456789012345"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text("IMEI: 123456789012345"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text("IMEI: 123456789012345"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text("IMEI: 123456789012345"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text("IMEI: 123456789012345"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text("IMEI: 123456789012345"),
-                      ),
+                    children: <Widget>[
+                      ListView.builder(
+                          itemCount: _data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Card(
+                                child: ListTile(
+                                  leading: Icon(Icons.router),
+                                  trailing: Icon(Icons.launch),
+                              title: Text(_data[index].imei.toString()),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UnitPageView(
+                                            token: widget.token,
+                                            device_id: _data[index].id)));
+                              },
+                            ));
+                          })
                     ],
                   ),
                 ),
@@ -155,7 +204,8 @@ class UnitSearchView extends StatelessWidget {
         return AlertDialog(
           title: const Text('Enter Value'),
           content: Column(
-            mainAxisSize: MainAxisSize.min, // To prevent content from expanding unnecessarily
+            mainAxisSize: MainAxisSize
+                .min, // To prevent content from expanding unnecessarily
             children: [
               const Text('Please enter a value below:'),
               TextField(
@@ -178,10 +228,6 @@ class UnitSearchView extends StatelessWidget {
                 // You can access the text entered in _controller.text
                 print("User entered: ${_controller.text}");
                 Navigator.of(context).pop(); // Close the dialog
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder:(context) => const UnitPageView())
-                );
               },
               child: const Text('Submit'),
             ),
