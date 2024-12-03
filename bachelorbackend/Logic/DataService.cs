@@ -92,47 +92,56 @@ public class DataService : IDataService
         return vehicles;
     }
 
-    public async Task<List<Vehicle>> vehicleSearch(string input, int filter, string currentToken)
+    private List<Vehicle> generateVehicleSearch(int offset, int amount)
     {
         List<Vehicle> vehicles = new List<Vehicle>();
-
-        switch (filter)
+        
+        for (int i = offset; i < amount; i++)
         {
-            case 1:
-                vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.OrgName, input)) 
-                    .ToListAsync();
-                break;
-            case 2:
-                vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.LicensePlate, input)) 
-                    .ToListAsync();
-                break;
-            case 3:
-                vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.VehicleName, input)) 
-                    .ToListAsync();
-                break;
-            case 4:
-                vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like("" + vehicle.IMEI, input)) 
-                    .ToListAsync();
-                break;
-            case 5:
-                vehicles = await _context.Vehicles
-                    .Where(vehicle => EF.Functions.Like(vehicle.CompanyCVR, input))
-                    .ToListAsync();
-                break;
-
-        }
-
-        if (vehicles.Count == 0)
-        {
-            return vehicles;
         }
 
         return vehicles;
+
     }
+
+    public async Task<List<Vehicle>> vehicleSearch(string input, int filter, string currentToken, int offset, int amount)
+    {
+        
+        
+        
+        
+        List<Vehicle> vehicles = new List<Vehicle>();
+
+        IQueryable<Vehicle> query = _context.Vehicles;
+
+        switch (filter)
+        {
+            case 1: 
+                query = query.Where(vehicle => EF.Functions.Like(vehicle.OrgName, input));
+                break;
+            case 2:
+                query = query.Where(vehicle => EF.Functions.Like(vehicle.LicensePlate, input));
+                break;
+            case 3:
+                query = query.Where(vehicle => EF.Functions.Like(vehicle.VehicleName, input));
+                break;
+            case 4:
+                query = query.Where(vehicle => EF.Functions.Like("" + vehicle.IMEI, input));
+                break;
+            case 5:
+                query = query.Where(vehicle => EF.Functions.Like(vehicle.CompanyCVR, input));
+                break;
+        }
+
+        // Apply offset and amount for pagination
+        vehicles = await query
+            .Skip(offset)
+            .Take(amount)
+            .ToListAsync();
+
+        return vehicles;
+    }
+
 
     public async Task<bool> createSkaderapport(Skaderapport skaderapport, string currentToken)
     {
@@ -207,6 +216,7 @@ public class DataService : IDataService
 
     public async Task<VehicleInfo> getVehicleInfo(int imei, string currentToken)
     {
+
         if(checkCurrentToken(currentToken))
         {
             if (_context.VehicleInfos.Any(u => u.IMEI == imei))
