@@ -9,43 +9,45 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = bachelorbackend
 build_property.RootNamespace = bachelorbackend
-build_property.ProjectDir = C:\Users\poizo\RiderProjects\bachelorbackend_temp\bachelorbackend\
+build_property.ProjectDir = A:\RiderProjects\bachelorbackend\bachelorbackend\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\poizo\RiderProjects\bachelorbackend_temp\bachelorbackend
+build_property.MSBuildProjectDirectory = A:\RiderProjects\bachelorbackend\bachelorbackend
 build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 6.0
+build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/poizo/RiderProjects/bachelorbackend_temp/bachelorbackend/App.razor]
+[A:/RiderProjects/bachelorbackend/bachelorbackend/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/poizo/RiderProjects/bachelorbackend_temp/bachelorbackend/Pages/Index.razor]
+[A:/RiderProjects/bachelorbackend/bachelorbackend/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/poizo/RiderProjects/bachelorbackend_temp/bachelorbackend/Shared/SurveyPrompt.razor]
+[A:/RiderProjects/bachelorbackend/bachelorbackend/Shared/SurveyPrompt.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/poizo/RiderProjects/bachelorbackend_temp/bachelorbackend/_Imports.razor]
+[A:/RiderProjects/bachelorbackend/bachelorbackend/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/poizo/RiderProjects/bachelorbackend_temp/bachelorbackend/Shared/MainLayout.razor]
+[A:/RiderProjects/bachelorbackend/bachelorbackend/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-415bbqiz6t
 
-[C:/Users/poizo/RiderProjects/bachelorbackend_temp/bachelorbackend/Shared/NavMenu.razor]
+[A:/RiderProjects/bachelorbackend/bachelorbackend/Shared/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-4fgd13kox0
 
-[C:/Users/poizo/RiderProjects/bachelorbackend_temp/bachelorbackend/Pages/_Host.cshtml]
+[A:/RiderProjects/bachelorbackend/bachelorbackend/Pages/_Host.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/poizo/RiderProjects/bachelorbackend_temp/bachelorbackend/Pages/_Layout.cshtml]
+[A:/RiderProjects/bachelorbackend/bachelorbackend/Pages/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0xheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

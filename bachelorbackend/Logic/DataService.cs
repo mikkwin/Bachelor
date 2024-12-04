@@ -228,6 +228,8 @@ public class DataService : IDataService
     public async Task<VehicleInfo> getVehicleInfo(int imei, string currentToken)
     {
 
+        return getVehicleInfo(imei).Result;
+        
         if(checkCurrentToken(currentToken))
         {
             if (_context.VehicleInfos.Any(u => u.IMEI == imei))
@@ -240,8 +242,9 @@ public class DataService : IDataService
         return null!;
     }
 
-    public VehicleInfo getVehicleInfo(int imei)
+    public async Task<VehicleInfo> getVehicleInfo(int imei)
     {
+        Console.WriteLine(imei);
         
         VehicleInfo vehicleInfo = new VehicleInfo
         {
@@ -253,7 +256,32 @@ public class DataService : IDataService
             IMEI = imei
         };
 
+        await _context.VehicleInfos.AddAsync(vehicleInfo);
+        await _context.SaveChangesAsync();
+        
+
         return vehicleInfo;
+
+    }
+    
+    private async Task<VehicleInfo> getVehicleInfoNoErrors(int imei)
+    {
+        
+        if (_context.VehicleInfos.Any(u => u.IMEI == imei))
+        {
+            VehicleInfo info = (await _context.VehicleInfos.FirstOrDefaultAsync(u => u.IMEI == imei))!;
+
+            List<ErrorCode> errorCodes = new List<ErrorCode>();
+            ErrorCode NoFails = ErrorCode.NO_ERR;
+            errorCodes.Add(NoFails);
+
+            info.Errors = errorCodes;
+            await _context.SaveChangesAsync();
+            
+            return info;
+        }
+
+        return null;
 
     }
 

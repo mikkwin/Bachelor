@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\poizo\\RiderProjects\\bachelorbackend_temp\\bachelorbackend\\bachelorbackend.csproj": {}
+    "A:\\RiderProjects\\bachelorbackend\\bachelorbackend\\bachelorbackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\poizo\\RiderProjects\\bachelorbackend_temp\\bachelorbackend\\bachelorbackend.csproj": {
+    "A:\\RiderProjects\\bachelorbackend\\bachelorbackend\\bachelorbackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\poizo\\RiderProjects\\bachelorbackend_temp\\bachelorbackend\\bachelorbackend.csproj",
+        "projectUniqueName": "A:\\RiderProjects\\bachelorbackend\\bachelorbackend\\bachelorbackend.csproj",
         "projectName": "bachelorbackend",
-        "projectPath": "C:\\Users\\poizo\\RiderProjects\\bachelorbackend_temp\\bachelorbackend\\bachelorbackend.csproj",
+        "projectPath": "A:\\RiderProjects\\bachelorbackend\\bachelorbackend\\bachelorbackend.csproj",
         "packagesPath": "C:\\Users\\poizo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\poizo\\RiderProjects\\bachelorbackend_temp\\bachelorbackend\\obj\\",
+        "outputPath": "A:\\RiderProjects\\bachelorbackend\\bachelorbackend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -43,8 +42,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
-        }
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net6.0": {
@@ -76,12 +76,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Host.linux-x64",
-              "version": "[6.0.33, 6.0.33]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -90,12 +84,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400\\RuntimeIdentifierGraph.json"
-        }
-      },
-      "runtimes": {
-        "linux-x64": {
-          "#import": []
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
