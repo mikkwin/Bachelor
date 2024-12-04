@@ -81,42 +81,12 @@ class _UnitPageViewState extends State<UnitPageView> {
                           },
                           child: const Icon(Icons.settings))
                     ]),
-                    Container(
-                      height: screenWidth * 0.08,
-                      width: screenWidth * 0.8,
-                      decoration: BoxDecoration(
-                        color: Colors.black12,
-                        borderRadius: BorderRadius.circular(5),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Divider(
+                        color: Colors.black,
                       ),
-                      child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: screenWidth * 0.01),
-                          child: Center(
-                              child: Text("Firma: ${_vehicle.OrgName}"))),
                     ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    const Row(children: [
-                      Icon(
-                        Icons.crisis_alert_rounded,
-                        size: 80,
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "Ingen fejl fundet",
-                            style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                decorationStyle: TextDecorationStyle.solid),
-                          ),
-                        ],
-                      )
-                    ]),
-                    const SizedBox(height: 20),
                     Expanded(
                         child: Container(
                       decoration: BoxDecoration(
@@ -126,8 +96,8 @@ class _UnitPageViewState extends State<UnitPageView> {
                         padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.03,
                             vertical: screenWidth * 0.02),
-                        child: const Text(
-                            "Ingen fejl diagnosticeret i automat diagnosticering."),
+                        child: Text(
+                            "Firm: ${_vehicle.OrgName}\nLicense plate: ${_vehicle.LicensePlate}\nVehicle nickname: ${_vehicle.VehicleName}"),
                       ),
                     )),
                     const SizedBox(height: 20),
