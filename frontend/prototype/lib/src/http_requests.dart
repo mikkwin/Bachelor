@@ -6,13 +6,17 @@ import 'package:prototype/src/DAOs/Vehicle.dart';
 Future<List<Vehicle>> getDevices(int offset, int amount, int filter, String token, String query) async {
   String url;
   if (query.isEmpty) {
-    url = "https://140.82.33.21:5001/Data/VehicleSearch?query=1234&filter=$filter&currentToken=$token&offset=$offset&amount=$amount";
+    url = "https://140.82.33.21:5001/Data/VehicleSearch?query=default&filter=$filter&currentToken=$token&offset=$offset&amount=$amount";
   }
   else {
     url = "https://140.82.33.21:5001/Data/VehicleSearch?query=$query&filter=$filter&currentToken=$token&offset=$offset&amount=$amount";
   }
 
+  print(url);
+
   final response = await http.get(Uri.parse(url));
+
+  print(response.body);
 
   if (response.statusCode == 200) {
     Iterable l = json.decode(response.body);
@@ -29,7 +33,8 @@ Future<Vehicle> getDevice(String imei, String token) async {
   final response = await http.get(Uri.parse("https://140.82.33.21:5001/Data/getVehicle?imei=$imei&currentToken=$token"));
 
   if (response.statusCode == 200) {
-    return Vehicle.fromJson(response.body);
+    var vehicle = Vehicle.fromJson(response.body);
+    return vehicle;
   }
   else if (response.statusCode > 200 && response.statusCode < 300) {
     Vehicle vehicle = Vehicle(id: 0, imei: 12345678901345);

@@ -30,10 +30,16 @@ class Vehicle extends Equatable {
 
 
   factory Vehicle.fromMap(Map<String, dynamic> map){
-    return Vehicle(
+    var vehicle = Vehicle(
     id: map['id'] as int,
     imei: map['imei'] as int,
     );
+
+    vehicle.OrgName = map['orgName'] == null ? "" : map['orgName'] as String;
+    vehicle.CompanyCVR = map['companyCVR'] == null ? "" : map['companyCVR'] as String;
+    vehicle.LicensePlate = map['licensePlate'] == null ? "" : map['licensePlate'] as String;
+
+    return vehicle;
   }
 
 
