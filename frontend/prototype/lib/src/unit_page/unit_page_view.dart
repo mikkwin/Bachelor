@@ -1,10 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:prototype/src/DAOs/Vehicle.dart';
+import 'package:prototype/src/DAOs/VehicleInfo.dart';
+import 'package:prototype/src/DAOs/enums/ErrorCode.dart';
 import 'package:prototype/src/device_settings/settings_view.dart';
 import 'package:prototype/src/http_requests.dart';
 import 'package:prototype/src/post_mortem/post_mortem.dart';
 import 'package:prototype/src/Data/DataPage.dart';
 import 'package:prototype/src/DAOs/VehicleSettings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:http/http.dart' as http;
+import '../DAOs/VehicleReadings.dart';
+import '../DAOs/enums/VehicleStatus.dart';
 
 class UnitPageView extends StatefulWidget {
   final String deviceImei;
@@ -27,6 +36,71 @@ class _UnitPageViewState extends State<UnitPageView> {
   void initState() {
     super.initState();
     _fetchInitialData();
+  }
+
+
+
+  Future<void> saveData(String key, String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+  }
+
+  static Future<String?> getData(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
+  }
+
+
+  Future<Map<String, dynamic>> fetchData() async {
+    try {
+      final String url = "https://140.82.33.21:5001/Data/getVehicle?imei=${_vehicle.imei}";
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        String? cached = await getData("VehicleErrorsResponseJson");
+        print("1");
+        await saveData("VehicleErrorsResponseJson", response.body);
+        print("2");
+        if(cached == null){
+          print("2.1");
+          final decoded = json.decode(response.body);
+          final errors = decoded['Errors'] as List;
+          if (decoded != null) {
+            print("2.2");
+            List<ErrorCode> temp = [];
+
+            errors.forEach((error) {
+              print(error.toString());
+              print(error);
+              temp.add(error);
+            });
+          }
+        }
+
+        if(cached != null){
+          print("3.1");
+          final decoded = json.decode(cached);
+          final errors = decoded['Errors'] as List;
+          if (decoded != null) {
+            List<ErrorCode> temp = [];
+            print("3.2");
+            errors.forEach((error) {
+              print(error.toString());
+              print(error);
+              temp.add(error);
+            });
+          }
+        }
+        print("4");
+        return json.decode(response.body);
+
+
+      } else {
+        throw Exception("PAGE_FEJL");
+      }
+    } catch (e) {
+      print(e);
+      throw Exception("Error: $e");
+    }
   }
 
   Future<void> _fetchInitialData() async {
@@ -59,6 +133,28 @@ class _UnitPageViewState extends State<UnitPageView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+
+                    Expanded(
+                        child: FutureBuilder<Map<String, dynamic>>(
+                      future: fetchData(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(child: Text('Error: ${snapshot.error}'));
+                        } else if (!snapshot.hasData || snapshot.data!['readings'].isEmpty) {
+                          return const Center(child: Text('No data available.'));
+                        } else {
+                          var vehicleInfo = snapshot.data!['errors'][0];
+
+      print(vehicleInfo);
+    }
+
+    return ListView();
+                      },
+                    )
+    ),
+
                     Row(children: [
                       Container(
                         height: screenWidth * 0.08,
@@ -111,7 +207,7 @@ class _UnitPageViewState extends State<UnitPageView> {
                       Column(
                         children: [
                           Text(
-                            "Ingen fejl fundet",
+                            "Fejl: ",
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 decorationStyle: TextDecorationStyle.solid),

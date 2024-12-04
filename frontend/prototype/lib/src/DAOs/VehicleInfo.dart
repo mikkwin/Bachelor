@@ -36,14 +36,19 @@ class VehicleInfo extends Equatable {
   }
 
 
-  factory VehicleInfo.fromMap(Map<String, dynamic> map){
+  factory VehicleInfo.fromMap(Map<String, dynamic> map) {
     return VehicleInfo(
       id: map['id'] as int,
       imei: map['imei'] as int,
-      Errors: map['errors'] as List<ErrorCode>,
-      Readings: map['readings'] as List<VehicleReadings>
+      Errors: (map['errors'] as List<dynamic>?)
+          ?.map((e) => ErrorCodeExtension.fromValue(e as int))
+          .toList() ?? [],
+      Readings: (map['readings'] as List<dynamic>?)
+          ?.map((e) => VehicleReadings.fromMap(e as Map<String, dynamic>))
+          .toList() ?? [],
     );
   }
+
 
 
   String toJson() => json.encode(toMap());

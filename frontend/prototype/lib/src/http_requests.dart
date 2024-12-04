@@ -6,7 +6,7 @@ import 'package:prototype/src/DAOs/Vehicle.dart';
 Future<List<Vehicle>> getDevices(int offset, int amount, int filter, String token, String query) async {
   String url;
   if (query.isEmpty) {
-    url = "https://140.82.33.21:5001/Data/VehicleSearch?query=1234&filter=$filter&currentToken=$token&offset=$offset&amount=$amount";
+    url = "https://140.82.33.21:5001/Data/VehicleSearch?query=default&filter=$filter&currentToken=$token&offset=$offset&amount=$amount";
   }
   else {
     url = "https://140.82.33.21:5001/Data/VehicleSearch?query=$query&filter=$filter&currentToken=$token&offset=$offset&amount=$amount";

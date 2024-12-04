@@ -15,7 +15,7 @@ class DataPage extends StatefulWidget {
 
 class _DataPageState extends State<DataPage> {
   final GlobalKey<LineChartWidgetState> chartKey = GlobalKey<LineChartWidgetState>();
-  final String url = "https://localhost:5001/Data/GetVehicle?IMEI=8945222";
+  final String url = "https://140.82.33.21:5001/Data/GetVehicleDemo?IMEI=2";
 
   Future<void> saveData(String key, String value) async {
     final prefs = await SharedPreferences.getInstance();
@@ -29,13 +29,72 @@ class _DataPageState extends State<DataPage> {
 
   Future<Map<String, dynamic>> fetchData() async {
     try {
-      String? cached = await getData("VehicleReadingsResponseJson");
-      if(cached == null){
+
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
-        await saveData("VehicleReadingsResponseJson", response.body);
         String? cached = await getData("VehicleReadingsResponseJson");
-      }
+
+        await saveData("VehicleReadingsResponseJson", response.body);
+
+        if(cached == null){
+          final decoded = json.decode(response.body);
+          final readings = decoded['readings'] as List;
+          if (decoded != null) {
+            List<VehicleReadings> temp = [];
+
+            readings.forEach((reading) {
+              print("Timestamp: ${reading['timestamp']}");
+              print("Panel Voltage: ${reading['panelVoltage']}");
+              print("Panel Current: ${reading['panelCurrent']}");
+
+              readings.forEach((reading) {
+                var x = VehicleReadings(
+                  id: reading['id'] ?? 0,
+                  // Default to 0 if null
+                  timestamp: reading['timestamp'] != null
+                      ? DateTime.parse(reading['timestamp'])
+                      : DateTime.now(),
+                  // Default to current time if null
+                  cumulativePower: (reading['cumulativePower'] as num?)
+                      ?.toDouble() ?? 0.0,
+                  // Default to 0.0 if null
+                  fullCharges: reading['fullCharges'] ?? 0,
+                  // Default to 0 if null
+                  hardwareVersion: (reading['hardwareVersion'] as num?)
+                      ?.toDouble() ?? 0.0,
+                  // Default to 0.0 if null
+                  maxVolt: (reading['maxVolt'] as num?)?.toDouble() ?? 0.0,
+                  // Default to 0.0 if null
+                  operationalTime: (reading['operationalTime'] as num?)
+                      ?.toDouble() ?? 0.0,
+                  // Default to 0.0 if null
+                  overDischarges: (reading['overDischarges'] as num?)
+                      ?.toDouble() ?? 0.0,
+                  // Default to 0.0 if null
+                  state: reading['state'] != null
+                      ? VehicleStatus.active
+                      : VehicleStatus.inactive,
+                  // Default to a fallback state
+                  softwareVersion: (reading['softwareVersion'] as num?)
+                      ?.toDouble() ?? 0.0,
+                  // Default to 0.0 if null
+                  panelCurrent: (reading['panelCurrent'] as num?)?.toDouble() ??
+                      0.0,
+                  // Default to 0.0 if null
+                  panelVoltage: (reading['panelVoltage'] as num?)?.toDouble() ??
+                      0.0, // Default to 0.0 if null
+                );
+
+                temp.add(x);
+              });
+              // Add other logic here
+            });
+
+
+            chartKey.currentState?.addReadings(temp, 0); // Add readings to the graph
+
+          }
+        }
 
         if(cached != null){
         final decoded = json.decode(cached);

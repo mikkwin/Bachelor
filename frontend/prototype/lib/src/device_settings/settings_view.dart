@@ -261,9 +261,10 @@ SettingsTextstate(
 
     void SendDataMeth(VehicleSettings setting) async
     {
-       final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) 
-      {
+
+      await saveData("noerror", "1");
+
+      /*
          String? cached = await getData("VehicleReadingsResponseJson");
          VehicleInfo vehicleInfo = VehicleInfo.fromJson(cached!);
           List<ErrorCode> LErrors = [ErrorCode.NO_ERR]; 
@@ -272,7 +273,7 @@ SettingsTextstate(
        String vehicleInfoToSend = vehicleInfo.toJson();
 
         await saveData("VehicleReadingsResponseJson", vehicleInfoToSend);
-      }
+*/
     }
 
     double checkDouble(String string){
