@@ -62,6 +62,7 @@ class PostMortem extends StatelessWidget {
               label: "Yderligere info",
               initialText: text4,
               onTextChanged: (newText) {
+                print("test");
                 provider.saveChanges(text1, text2, text3, newText);
               }
               ),
@@ -72,7 +73,7 @@ class PostMortem extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const UnitSearchView()));
+                        builder: (context) => const UnitSearchView(token: "")));
                     provider.clearChanges();
               },
               child: const Text('Gem'),
