@@ -1,7 +1,0 @@
-A:\RiderProjects\bachelorbackend\bachelorbackend\bin\Debug\net6.0\linux-x64\publish\bachelorbackend
-A:\RiderProjects\bachelorbackend\bachelorbackend\bin\Debug\net6.0\linux-x64\publish\appsettings.Development.json
-A:\RiderProjects\bachelorbackend\bachelorbackend\bin\Debug\net6.0\linux-x64\publish\appsettings.json
-A:\RiderProjects\bachelorbackend\bachelorbackend\bin\Debug\net6.0\linux-x64\publish\bachelorbackend.dll
-A:\RiderProjects\bachelorbackend\bachelorbackend\bin\Debug\net6.0\linux-x64\publish\bachelorbackend.deps.json
-A:\RiderProjects\bachelorbackend\bachelorbackend\bin\Debug\net6.0\linux-x64\publish\bachelorbackend.runtimeconfig.json
-A:\RiderProjects\bachelorbackend\bachelorbackend\bin\Debug\net6.0\linux-x64\publish\bachelorbackend.pdb
