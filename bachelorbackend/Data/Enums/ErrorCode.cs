@@ -1,0 +1,19 @@
+﻿namespace bachelorbackend.Data.Enums;
+
+public enum ErrorCode
+{
+    NO_ERR = 0,
+    BATT_OVER_DISCHARGE = 1,
+    BATT_OVER_VOLTAGE = 2,
+    BATT_UNDER_VOLTAGE = 4,
+    LOAD_SHORT_CIRQUIT = 8,
+    LOAD_OVER_POWER = 16,
+    CTRL_TEMP_HIGH = 32,
+    BATT_TEMP_HIGH = 64,
+    PV_IN_OVER_POWER = 128,
+    PV_IN_OVER_VOLT = 512,
+    PV_MPPT_OVER_VOLT = 2048,
+    PV_REV_POL = 4096,
+    BATT_CHARGE_PROTECTION = 67108864,
+    BATT_REV_POLARITY = 268435456
+}
