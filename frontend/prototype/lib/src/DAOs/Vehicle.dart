@@ -51,6 +51,8 @@ class Vehicle extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  factory Vehicle.fromJson(String source) => Vehicle.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Vehicle.fromJson(String source) {
+      return Vehicle.fromMap(json.decode(source) as Map<String, dynamic>);
+    }
 
 }

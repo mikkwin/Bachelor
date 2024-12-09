@@ -7,6 +7,7 @@ class DataLoadingButton extends StatefulWidget {
   final List<String> data;
   final TextStyle textStyle;
   final Icon prefixIcon;
+  final bool enablePreview;
   final void Function() onPress;
 
   const DataLoadingButton(
@@ -15,6 +16,7 @@ class DataLoadingButton extends StatefulWidget {
       this.data = const [],
       this.textStyle = const TextStyle(),
       this.prefixIcon = const Icon(Icons.abc),
+      this.enablePreview = true,
       required this.onPress});
 
   @override
@@ -54,8 +56,43 @@ class _DataLoadingButton extends State<DataLoadingButton>
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.enablePreview) {
+      return GestureDetector(
+      onTap: () {
+        widget.onPress.call();
+      },
+      child: AnimatedContainer(
+        duration: const Duration(seconds: 1),
+        child: Padding(padding: const EdgeInsets.symmetric(vertical: 10), child:
+        Card(
+            child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: Text(
+                          widget.buttonName,
+                          style: widget.textStyle,
+                        ))
+                        ,
+                        const SizedBox(width: 20,),
+                        const Icon(Icons.keyboard_arrow_right)
+                      ],
+                    ))
+                  ],
+                )))),
+      ),
+    );
+    }
+
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        widget.onPress.call();
+      },
       child: AnimatedContainer(
         duration: const Duration(seconds: 1),
         child: Padding(padding: const EdgeInsets.symmetric(vertical: 10), child:

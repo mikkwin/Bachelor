@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:prototype/src/DAOs/Vehicle.dart';
 import 'package:prototype/src/DAOs/VehicleReadings.dart';
-import 'package:prototype/src/DAOs/VehicleSettings.dart';
 
 Future<List<Vehicle>> getDevices(int offset, int amount, int filter, String token, String query) async {
   String url;
@@ -29,12 +28,13 @@ Future<List<Vehicle>> getDevices(int offset, int amount, int filter, String toke
 
 Future<Map<String,dynamic>> getDevice(String imei, String token) async {
   final response = await http.get(Uri.parse("https://140.82.33.21:5001/Data/getVehicle?imei=$imei&currentToken=$token"));
-
+  var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
   if (response.statusCode == 200) {
-    print(response.body);
-    var vehicle = Vehicle.fromJson(response.body);
-    var readings = VehicleReadings.fromJson(response.body);
-    return {"vehicle": vehicle, "readings": readings};
+
+    var vehicle = Vehicle.fromMap(jsonResponse);
+
+    var readings = VehicleReadings.fromMap(jsonResponse['readings'][0]);
+    return {"vehicle": vehicle, "readings": readings, "settings": {}};
   }
   else if (response.statusCode > 200 && response.statusCode < 300) {
     Vehicle vehicle = Vehicle(id: 0, imei: "12345678901345");
