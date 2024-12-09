@@ -22,7 +22,7 @@ public class SettingsController : ControllerBase
     
     [HttpGet("GetSettings")]
     [AllowAnonymous]
-    public async Task<ActionResult> getSettings(int imei, string currentToken)
+    public async Task<ActionResult> getSettings(string imei, string currentToken)
     {
         VehicleSetting setting = await _settingsService.getSettings(imei, currentToken);
 
@@ -35,7 +35,7 @@ public class SettingsController : ControllerBase
     {
         Console.WriteLine(settings.ToString());
         
-        if (await _settingsService.updateSettings(int.Parse(settings.IMEI), settings, currentToken))
+        if (await _settingsService.updateSettings(settings.IMEI, settings, currentToken))
         {
             return Ok();
         }

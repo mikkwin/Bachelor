@@ -8,9 +8,6 @@ namespace bachelorbackend.Data;
 
 public class DataService : IDataService
 {
-    private string URL_KEY = "db542dcc6b5cf658536d7db8e9e5e7c3 aceddd490d711d00a28fc2f6bec0050e27616b31d7093fc95b492335b36fbe24124839b795758b19b8e52daa81e0651f843941ad67854122136131448c4ef7c9380488b538b73fc1365e4593c092b7035584bda5d8e14529ea318bc816e8eca62386ac19d81e42445ea8a3d1e676031febed3b03ce3209b0a525484352d9b6a6e";
-    private string DB_KEY = "aebguåaebgae9geaguae";
-
     
     private readonly IConfiguration config;
     private DataContext _context;
@@ -34,7 +31,7 @@ public class DataService : IDataService
 
             VehicleReadings reading = new VehicleReadings()
             {
-                Timestamp = time.AddMinutes(i),
+                Timestamp = time.AddMinutes(-5),
                 Fullcharges = random.Next(10000),
                 CumulativePower = random.NextDouble() * 1000,
                 HardwareVersion = 1.1,
@@ -92,7 +89,7 @@ public class DataService : IDataService
         return vehicles;
     }
 
-    private List<Vehicle> generateVehicleSearch(int offset, int amount)
+    private List<Vehicle> generateVehicleSearch(int offset, int amount, string imei)
     {
         List<Vehicle> vehicles = new List<Vehicle>();
         
@@ -101,7 +98,7 @@ public class DataService : IDataService
             Vehicle vehicle = new Vehicle()
             {
                 Id = i,
-                IMEI = 00000000000000 + i,
+                IMEI = imei,
                 LicensePlate = $"EG{i}979",
                 OrgName = $"Org{i}",
                 VehicleName = $"Vehicle{i}",
@@ -120,27 +117,34 @@ public class DataService : IDataService
         
         List<Vehicle> vehicles = new List<Vehicle>();
 
-        vehicles = generateVehicleSearch(offset, amount);
-        return vehicles;
+        if (input == "default")
+        {
+            return generateVehicleSearch(offset, amount, input);
+        }
 
         IQueryable<Vehicle> query = _context.Vehicles;
 
         switch (filter)
         {
-            case 1: 
-                query = query.Where(vehicle => EF.Functions.Like(vehicle.OrgName, input));
+            case 1:
+                Console.WriteLine("OrgName");
+                query = query.Where(vehicle => vehicle.OrgName != null && vehicle.OrgName.Contains(input));
                 break;
             case 2:
-                query = query.Where(vehicle => EF.Functions.Like(vehicle.LicensePlate, input));
+                Console.WriteLine("LP");
+                query = query.Where(vehicle => vehicle.LicensePlate != null && vehicle.LicensePlate.Contains(input));
                 break;
             case 3:
-                query = query.Where(vehicle => EF.Functions.Like(vehicle.VehicleName, input));
+                Console.WriteLine("VehicleName");
+                query = query.Where(vehicle => vehicle.VehicleName != null && vehicle.VehicleName.Contains(input));
                 break;
             case 4:
-                query = query.Where(vehicle => EF.Functions.Like("" + vehicle.IMEI, input));
+                Console.WriteLine("IMEI");
+                query = query.Where(vehicle => vehicle.IMEI != null && vehicle.IMEI.Contains(input));
                 break;
             case 5:
-                query = query.Where(vehicle => EF.Functions.Like(vehicle.CompanyCVR, input));
+                Console.WriteLine("CVR");
+                query = query.Where(vehicle => vehicle.CompanyCVR != null && vehicle.CompanyCVR.Contains(input));
                 break;
         }
 
@@ -149,7 +153,7 @@ public class DataService : IDataService
             .Skip(offset)
             .Take(amount)
             .ToListAsync();
-
+        
         return vehicles;
     }
 
@@ -179,9 +183,9 @@ public class DataService : IDataService
         {
             try
             {
-                if (_context.Skaderapports.Any(u => u.IMEINumber == ""+imei))
+                if (_context.Skaderapports.Any(u => u.IMEI == ""+imei))
                 {
-                    Skaderapport temp = (await _context.Skaderapports.FirstOrDefaultAsync(u => u.IMEINumber == ""+imei))!;
+                    Skaderapport temp = (await _context.Skaderapports.FirstOrDefaultAsync(u => u.IMEI == ""+imei))!;
                     return temp;
                 }
             }
@@ -199,10 +203,10 @@ public class DataService : IDataService
         {
             try
             {
-                if (_context.Skaderapports.Any(u => u.IMEINumber == skaderapport.IMEINumber))
+                if (_context.Skaderapports.Any(u => u.IMEI == skaderapport.IMEI))
                 {
                     Skaderapport temp =
-                        (await _context.Skaderapports.FirstOrDefaultAsync(u => u.IMEINumber == skaderapport.IMEINumber))
+                        (await _context.Skaderapports.FirstOrDefaultAsync(u => u.IMEI == skaderapport.IMEI))
                         !;
                     temp.A = skaderapport.A;
                     temp.B = skaderapport.B;
@@ -225,7 +229,7 @@ public class DataService : IDataService
     }
 
 
-    public async Task<VehicleInfo> getVehicleInfo(int imei, string currentToken)
+    public async Task<VehicleInfo> getVehicleInfo(string imei, string currentToken)
     {
 
         return getVehicleInfo(imei).Result;
@@ -242,7 +246,7 @@ public class DataService : IDataService
         return null!;
     }
 
-    public async Task<VehicleInfo> getVehicleInfo(int imei)
+    public async Task<VehicleInfo> getVehicleInfo(string imei)
     {
         Console.WriteLine(imei);
         
@@ -263,8 +267,79 @@ public class DataService : IDataService
         return vehicleInfo;
 
     }
+
+    public async Task<ActionResult<string>> fillDatabase()
+    {
+        Random random = new Random();
+        for (int i = 0; i < 30; i++)
+        {
+
+            string prefix = random.Next(0, 2) == 0 ? "8945" : "8633";
+            string randomDigits = "";
+            for (int j = 0; j < 11; j++)
+            {
+                randomDigits += random.Next(0, 10).ToString();
+            }
+            
+            string imei = prefix + randomDigits;
+
+            if (!_context.Vehicles.Any(x => x.IMEI == imei))
+            {
+                
+                char firstLetter = (char)random.Next('A', 'Z' + 1);
+                char secondLetter = (char)random.Next('A', 'Z' + 1);
+                
+                string digits = "";
+                for (int k = 0; k < 5; k++)
+                {
+                    digits += random.Next(0, 10).ToString();
+                }
+
+                string licensePlate = $"{firstLetter}{secondLetter}{digits}";
+                
+                string cvrNumber = "";
+                for (int l = 0; l < 8; l++)
+                {
+                    cvrNumber += random.Next(0, 10).ToString();
+                }
+
+                Vehicle vehicle = new Vehicle()
+                {
+                    IMEI = imei,
+                    LicensePlate = licensePlate,
+                    VehicleName = "MPPT DTU",
+                    CompanyCVR = cvrNumber,
+                    LastTechnicianSearch = 0,
+                    OrgName = i % 2 == 0 ? "VIA" : "GreenEnergy"
+                };
+                
+                
+                
+                await _context.Vehicles.AddAsync(vehicle);
+                _context.SaveChanges();
+                
+                VehicleInfo vehicleInfo = new VehicleInfo()
+                {
+                    Errors = returnRandomErrors(),
+                    Readings = RandomVehicleReadingsGen(),
+                    IMEI = imei,
+                    LatCords = random.NextDouble() * 5.5,
+                    LonCords = random.NextDouble() * 10.10,
+                    ProductType = "MPPT DTU",
+                };
+
+                await _context.VehicleInfos.AddAsync(vehicleInfo);
+                await _context.SaveChangesAsync();
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        return new ActionResult<string>("good");
+
+    }
     
-    private async Task<VehicleInfo> getVehicleInfoNoErrors(int imei)
+    
+    private async Task<VehicleInfo> getVehicleInfoNoErrors(string imei)
     {
         
         if (_context.VehicleInfos.Any(u => u.IMEI == imei))

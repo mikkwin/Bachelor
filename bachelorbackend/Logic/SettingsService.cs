@@ -17,7 +17,7 @@ public class SettingsService : ISettingsService
         _context = context;
     }
     
-    public async Task<bool> updateSettings(int imei, VehicleSetting settings, string currentToken)
+    public async Task<bool> updateSettings(string imei, VehicleSetting settings, string currentToken)
     {
         var existingSetting = await _context.VehicleSettings.FirstOrDefaultAsync(u => u.IMEI == "" + imei);
 
@@ -51,7 +51,7 @@ public class SettingsService : ISettingsService
         return false;
     }
     
-    private async void getVehicleInfoNoErrors(int imei)
+    private async void getVehicleInfoNoErrors(string imei)
     {
         
         if (_context.VehicleInfos.Any(u => u.IMEI == imei))
@@ -68,7 +68,7 @@ public class SettingsService : ISettingsService
         }
     }
 
-    public Task<VehicleSetting> getSettings(int imei, string currentToken)
+    public Task<VehicleSetting> getSettings(string imei, string currentToken)
     {
         throw new NotImplementedException();
     }

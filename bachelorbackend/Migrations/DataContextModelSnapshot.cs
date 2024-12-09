@@ -27,8 +27,9 @@ namespace bachelorbackend.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("IMEI")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("IMEI")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("LastTechnicianSearch")
                         .HasColumnType("INTEGER");
@@ -61,8 +62,9 @@ namespace bachelorbackend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("IMEI")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("IMEI")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<double>("LatCords")
                         .HasColumnType("REAL");
@@ -158,7 +160,7 @@ namespace bachelorbackend.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("IMEINumber")
+                    b.Property<string>("IMEI")
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("TEXT");

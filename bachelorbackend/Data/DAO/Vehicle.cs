@@ -19,7 +19,7 @@ public class Vehicle
     public string? LicensePlate { get; set; }
 
     [Required]
-    public int IMEI { get; set; }
+    public string IMEI { get; set; }
 
     [MaxLength(10)]
     public string? CompanyCVR { get; set; }

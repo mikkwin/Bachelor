@@ -12,7 +12,7 @@ public class VehicleInfo
     public int Id { get; set; }
 
     [Required]
-    public int IMEI { get; set; }
+    public string IMEI { get; set; }
 
     [Required]
     [MaxLength(50)] // Adjust based on expected ProductType length

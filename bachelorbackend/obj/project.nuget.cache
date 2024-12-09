@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NcFP+9NiDbE=",
+  "dgSpecHash": "u8w2tB697Ik=",
   "success": true,
-  "projectFilePath": "A:\\RiderProjects\\bachelorbackend\\bachelorbackend\\bachelorbackend.csproj",
+  "projectFilePath": "C:\\Users\\poizo\\RiderProjects\\bachelorbackend_temp\\bachelorbackend\\bachelorbackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\poizo\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\poizo\\.nuget\\packages\\microsoft.data.sqlite.core\\6.0.36\\microsoft.data.sqlite.core.6.0.36.nupkg.sha512",

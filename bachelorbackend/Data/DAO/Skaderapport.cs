@@ -24,7 +24,7 @@ public class Skaderapport
 
     [Required]
     [MaxLength(15)] // Typical IMEI length
-    public string IMEINumber { get; set; }
+    public string IMEI { get; set; }
 
     [Required]
     public int TeknikerId { get; set; }

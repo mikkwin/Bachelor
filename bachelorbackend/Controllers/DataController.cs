@@ -74,12 +74,23 @@ public class DataController : ControllerBase
     
     [HttpGet("GetVehicle")]
     [AllowAnonymous]
-    public Task<VehicleInfo> getVehicle(int imei, string currentToken)
+    public Task<VehicleInfo> getVehicle(string imei, string currentToken)
     {
         
         VehicleInfo vehicleInfo = _dataService.getVehicleInfo(imei, currentToken).Result;
 
         return Task.FromResult(vehicleInfo);
+    }
+
+
+
+    [HttpGet("FillDatabase")]
+    [AllowAnonymous]
+    public async Task<ActionResult<string>> FillDatabase()
+    {
+        _dataService.fillDatabase();
+        
+        return Ok("Database has been created");
     }
 
 }

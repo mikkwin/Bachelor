@@ -8,7 +8,8 @@ public interface IDataService
 
 
     public List<Vehicle> getTechnicianHistory(int techID);
-    public Task<VehicleInfo> getVehicleInfo(int imei, string currentToken);
+    public Task<VehicleInfo> getVehicleInfo(string imei, string currentToken);
     public Task<List<Vehicle>> vehicleSearch(string input, int filter, string currentToken, int offset, int amount);
 
+    public Task<ActionResult<string>> fillDatabase();
 }
