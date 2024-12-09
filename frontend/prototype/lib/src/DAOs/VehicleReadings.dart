@@ -70,7 +70,7 @@ class VehicleReadings extends Equatable {
   factory VehicleReadings.fromMap(Map<String, dynamic> map) {
     return VehicleReadings(
       id: map['id'] as int,
-      timestamp: DateTime.parse(map['timestamp'] as String),
+      timestamp: DateTime.parse("${map['timestamp']}"),
       cumulativePower: map['cumulativePower'] as double,
       fullCharges: map['fullCharges'] as int,
       hardwareVersion: map['hardwareVersion'] as double,

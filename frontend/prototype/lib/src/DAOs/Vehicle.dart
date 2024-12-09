@@ -7,10 +7,16 @@ class Vehicle extends Equatable {
   int id;
   String VehicleName = "";
   String LicensePlate = "";
-  int imei;
+  String imei;
   String CompanyCVR = "";
   String OrgName = "";
   int LastTechnicanSearch = -1;
+
+  String Model = "";
+
+  String Make = "";
+
+  String Year = "";
 
   Vehicle({
     required this.id,
@@ -32,7 +38,7 @@ class Vehicle extends Equatable {
   factory Vehicle.fromMap(Map<String, dynamic> map){
     var vehicle = Vehicle(
     id: map['id'] as int,
-    imei: map['imei'] as int,
+    imei: map['imei'] as String,
     );
 
     vehicle.OrgName = map['orgName'] == null ? "" : map['orgName'] as String;

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/src/DAOs/Vehicle.dart';
+import 'package:prototype/src/DAOs/VehicleSettings.dart';
+import 'package:prototype/src/Data/DataPage.dart';
 import 'package:prototype/src/device_settings/settings_view.dart';
 import 'package:prototype/src/http_requests.dart';
-import 'package:prototype/src/post_mortem/post_mortem.dart';
-import 'package:prototype/src/Data/DataPage.dart';
-import 'package:prototype/src/DAOs/VehicleSettings.dart';
+import 'package:prototype/src/unit_page/unit_page_button.dart';
+import 'package:prototype/src/unit_page/unit_page_info_panel.dart';
 
 class UnitPageView extends StatefulWidget {
   final String deviceImei;
@@ -13,29 +14,34 @@ class UnitPageView extends StatefulWidget {
   const UnitPageView(
       {super.key, required this.token, required this.deviceImei});
   static const routeName = '/unit_page';
-  
 
   @override
   createState() => _UnitPageViewState();
 }
 
 class _UnitPageViewState extends State<UnitPageView> {
-  Vehicle _vehicle = Vehicle(id: 1, imei: 12345678901245);
+  Vehicle _vehicle = Vehicle(id: 1, imei: "12345678901245");
+  late VehicleSettings _settings;
   bool _isLoading = false;
 
   @override
   void initState() {
-    super.initState();
     _fetchInitialData();
+    super.initState();
   }
 
   Future<void> _fetchInitialData() async {
     setState(() {
       _isLoading = true;
     });
+    var response = await getDevice(widget.deviceImei, widget.token);
+      _vehicle = response["vehicle"];
+      _settings = response["readings"];
 
     try {
-      _vehicle = await getDevice(widget.deviceImei, widget.token);
+      var response = await getDevice(widget.deviceImei, widget.token);
+      _vehicle = response["vehicle"];
+      _settings = response["settings"];
     } catch (e) {
       throw Exception("Error fetching device: $e");
     } finally {
@@ -44,92 +50,124 @@ class _UnitPageViewState extends State<UnitPageView> {
       });
     }
   }
+  
+  void _openTextDialog(String title, void Function(String) onTextSubmitted) async {
+    String dialogText = "";
+    await showDialog(
+      context: context, 
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: TextField(
+            controller: TextEditingController(text: dialogText),
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Enter your text here...'
+            ),
+            onChanged: (value) {
+              dialogText = value;
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, dialogText);
+                onTextSubmitted(dialogText);
+              }, 
+              child: const Text("OK")
+              )
+          ],
+        );
+      },
+      );
+  }
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    final VehicleSettings VeToSend = VehicleSettings(serialId: 12345, imei: "123456789123456", s010a: 1, e003:2, e004: 3, e005: 4, e006: 5, e007: 6, e008: 7, e009: 8, e00a: 9, e00b: 10, e00c: 11, e00d: 12, e00e: 13, e010: 14, e011: 15, e012: 16, e013: 17, e014: 18);
-
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: const Text('Device Page'),
+        ),
         body: Center(
-            child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(children: [
-                      Container(
-                        height: screenWidth * 0.08,
-                        width: screenWidth * 0.5,
-                        decoration: BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: screenWidth * 0.01),
-                            child:
-                                Center(child: Text("IMEI: ${_vehicle.imei}"))),
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 60),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                children: [
+                  Padding(padding: const EdgeInsets.only(bottom: 20), child:
+                  Text(
+                    "IMEI: ${_vehicle.imei}",
+                    style: const TextStyle(
+                      fontSize: 20
                       ),
-                      const Expanded(child: SizedBox()),
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                         settingsView(vehicleSettings: VeToSend)));
-                          },
-                          child: const Icon(Icons.settings))
-                    ]),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Divider(
-                        color: Colors.black,
-                      ),
-                    ),
-                    Expanded(
-                        child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.03,
-                            vertical: screenWidth * 0.02),
-                        child: Text(
-                            "Firm: ${_vehicle.OrgName}\nLicense plate: ${_vehicle.LicensePlate}\nVehicle nickname: ${_vehicle.VehicleName}"),
-                      ),
-                    )),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const PostMortem()));
-                            },
-                            child: const Text("Skades Rapport")),
-                        const Expanded(child: SizedBox()),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => DataPage()));
-                            },
-                            child: const Text("Data"))
-                      ],
-                    ),
-                    SizedBox(
-                      height: screenWidth * 0.15,
-                    )
-                  ],
-                ))));
+                  )),
+
+                  InfoPanel(
+                      info: "Firm",
+                      infoText: _vehicle.OrgName,
+                      onButtonPress: () {
+                        _openTextDialog("Firm", (value) => setState(() {
+                          _vehicle.OrgName = value;
+                        }));
+                      }),
+                  InfoPanel(
+                      info: "Make",
+                      infoText: _vehicle.Make,
+                      onButtonPress: () {
+                        _openTextDialog("Make", (value) => setState(() {
+                          _vehicle.Make = value;
+                        }));
+                      }),
+                  InfoPanel(
+                      info: "Model",
+                      infoText: _vehicle.Model,
+                      onButtonPress: () {
+                        _openTextDialog("Model", (value) => setState(() {
+                          _vehicle.Model = value;
+                        }));
+                      }),
+                  InfoPanel(
+                      info: "Year",
+                      infoText: _vehicle.Year,
+                      onButtonPress: () {
+                        _openTextDialog("Year", (value) => setState(() {
+                          _vehicle.Year = value;
+                        }));
+                      }),
+                  InfoPanel(
+                      info: "Nick",
+                      infoText: _vehicle.VehicleName,
+                      onButtonPress: () {
+                        _openTextDialog("Nickname", (value) => setState(() {
+                          _vehicle.VehicleName = value;
+                        }));
+                      }),
+                  const Expanded(child: SizedBox()),
+                  DataLoadingButton(
+                      buttonName: "Data",
+                      textStyle: const TextStyle(fontSize: 24),
+                      data: ["test1", "test2", "test3"],
+                      onPress: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => DataPage() ));
+                      }),
+                  DataLoadingButton(
+                      buttonName: "Settings",
+                      textStyle: const TextStyle(fontSize: 24),
+                      data: ["test1", "test2", "test3"],
+                      onPress: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => settingsView(vehicleSettings: _settings) ));
+                      }),
+                  DataLoadingButton(
+                      buttonName: "Rapport",
+                      textStyle: const TextStyle(fontSize: 24),
+                      data: ["test1", "test2", "test3"],
+                      onPress: () {}),
+                ],
+              )),
+        ));
   }
 }
