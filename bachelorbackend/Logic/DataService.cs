@@ -119,7 +119,8 @@ public class DataService : IDataService
 
         if (input == "default")
         {
-            return generateVehicleSearch(offset, amount, input);
+            vehicles = _context.Vehicles.Take(amount).ToList();
+            return vehicles;
         }
 
         IQueryable<Vehicle> query = _context.Vehicles;
@@ -231,8 +232,6 @@ public class DataService : IDataService
 
     public async Task<VehicleInfo> getVehicleInfo(string imei, string currentToken)
     {
-
-        return getVehicleInfo(imei).Result;
         
         if(checkCurrentToken(currentToken))
         {

@@ -24,9 +24,15 @@ public class SettingsController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult> getSettings(string imei, string currentToken)
     {
-        VehicleSetting setting = await _settingsService.getSettings(imei, currentToken);
+        var setting = await _settingsService.getSettings(imei, currentToken);
 
-        return BadRequest();
+        if (setting != null)
+        {
+            
+        }
+        
+
+        return BadRequest("Invalid token or IMEI");
     }
     
     [HttpPatch("UpdateSettings")]
@@ -41,6 +47,14 @@ public class SettingsController : ControllerBase
         }
 
         return BadRequest();
+    }
+
+    [HttpGet("FillSettings")]
+    [AllowAnonymous]
+    public async Task<ActionResult<string>> generateSetings()
+    {
+        await _settingsService.generateSettingsForAllVehicles();
+        return Ok("Settings has been created");
     }
 
 }

@@ -291,3 +291,15 @@ C:\Users\poizo\RiderProjects\bachelorbackend_temp\bachelorbackend\obj\Debug\net6
 C:\Users\poizo\RiderProjects\bachelorbackend_temp\bachelorbackend\obj\Debug\net6.0\bachelorbackend.pdb
 C:\Users\poizo\RiderProjects\bachelorbackend_temp\bachelorbackend\obj\Debug\net6.0\bachelorbackend.genruntimeconfig.cache
 C:\Users\poizo\RiderProjects\bachelorbackend_temp\bachelorbackend\obj\Debug\net6.0\ref\bachelorbackend.dll
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\bachelorbackend.csproj.AssemblyReference.cache
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\bachelorbackend.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\bachelorbackend.AssemblyInfoInputs.cache
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\bachelorbackend.AssemblyInfo.cs
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\bachelorbackend.csproj.CoreCompileInputs.cache
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\bachelorbackend.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\bachelorbackend.RazorAssemblyInfo.cache
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\bachelorbackend.RazorAssemblyInfo.cs
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\bachelorbackend.sourcelink.json
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\bachelorbackend.dll
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\refint\bachelorbackend.dll
+C:\Users\poizo\RiderProjects\Bachelorx\bachelorbackend\obj\Debug\net6.0\bachelorbackend.pdb
