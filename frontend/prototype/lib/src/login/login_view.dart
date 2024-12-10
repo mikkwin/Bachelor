@@ -74,9 +74,9 @@ class LoginView extends StatelessWidget {
                           fetchData() async {
                             try {
                               final response = await http.get(Uri.parse(url));
-                              if (response.statusCode == 200) {
+                              if (response.statusCode == 200 && context.mounted) {
                                 Navigator.push(
-                                    context.mounted as BuildContext,
+                                    context,
                                     MaterialPageRoute(
                                         builder: (context) => UnitSearchView(
                                             token: response.body)));

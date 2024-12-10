@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:prototype/src/DAOs/Vehicle.dart';
 import 'package:prototype/src/DAOs/VehicleReadings.dart';
+import 'package:prototype/src/DAOs/VehicleSettings.dart';
 
 Future<List<Vehicle>> getDevices(int offset, int amount, int filter, String token, String query) async {
   String url;
@@ -26,7 +27,20 @@ Future<List<Vehicle>> getDevices(int offset, int amount, int filter, String toke
   }
 }
 
-//"https://140.82.33.21:5001/Settings/getSetting?imei=$imei&currentToken=$token"
+Future<VehicleSettings> getSettings(String imei, String token) async {
+  final response = await http.get(Uri.parse("https://140.82.33.21:5001/Settings/getSettings?imei=$imei&currentToken=$token"));
+  var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+  if (response.statusCode == 200) {
+    print(jsonResponse);
+    var settings = VehicleSettings.fromMap(jsonResponse);
+
+
+    return settings;
+  }
+  else {
+    throw Exception('Failed to load settings.');
+  }
+}
 
 Future<Map<String,dynamic>> getDevice(String imei, String token) async {
   final response = await http.get(Uri.parse("https://140.82.33.21:5001/Data/getVehicle?imei=$imei&currentToken=$token"));

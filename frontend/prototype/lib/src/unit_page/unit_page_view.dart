@@ -71,21 +71,25 @@ class _UnitPageViewState extends State<UnitPageView> {
       _isLoading = true;
     });
 
-    Map<String, dynamic> response;
+    Map<String, dynamic> deviceResponse;
+    VehicleSettings settingsResponse;
 
     try {
-      response = await getDevice(widget.deviceImei, widget.token);
+      deviceResponse = await getDevice(widget.deviceImei, widget.token);
+      settingsResponse = await getSettings(widget.deviceImei, widget.token);
       setState(() {
         _isLoading = false;
         try {
-          _readings = response["readings"];
-          _vehicle = response["vehicle"];
+          _readings = deviceResponse["readings"];
+          _vehicle = deviceResponse["vehicle"];
+          _settings = settingsResponse;
         } on TypeError catch (e) {
-          _vehicle = response["vehicle"];
+          _vehicle = deviceResponse["vehicle"];
+          _settings = settingsResponse;
         }
       });
     } catch (e) {
-      throw Exception("Error fetching device: $e");
+      throw Exception("Error fetching data: $e");
     }
   }
 
@@ -217,13 +221,13 @@ class _UnitPageViewState extends State<UnitPageView> {
                       buttonName: "Settings",
                       textStyle: const TextStyle(fontSize: 24),
                       data: ["test1", "test2", "test3"],
-                      enablePreview: _readings.id != 0,
+                      enablePreview: _settings.serialId != 0,
                       onPress: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    SettingsView(vehicleSettings: _settings)));
+                                    settingsView(vehicleSettings: _settings)));
                       }),
                   DataLoadingButton(
                       buttonName: "Rapport",
