@@ -227,7 +227,7 @@ class _UnitPageViewState extends State<UnitPageView> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    settingsView(vehicleSettings: _settings)));
+                                    SettingsView(vehicleSettings: _settings)));
                       }),
                   DataLoadingButton(
                       buttonName: "Rapport",
