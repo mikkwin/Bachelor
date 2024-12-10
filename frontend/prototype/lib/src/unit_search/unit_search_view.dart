@@ -275,6 +275,10 @@ class _UnitSearchViewState extends State<UnitSearchView> {
                         controller: _scrollController,
                         itemCount: _data.length,
                         itemBuilder: (BuildContext context, int index) {
+                          if (_isLoading) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
                           return Card(
                               child: ListTile(
                             leading: const Icon(Icons.router),
@@ -286,7 +290,7 @@ class _UnitSearchViewState extends State<UnitSearchView> {
                                   MaterialPageRoute(
                                       builder: (context) => UnitPageView(
                                           token: widget.token,
-                                          deviceImei: "${_data[index].imei}")));
+                                          deviceImei: _data[index].imei)));
                             },
                           ));
                         })),
