@@ -30,6 +30,10 @@
       <excludeFolder url="file://$MODULE_DIR$/frontend/prototype/windows/flutter/ephemeral/.plugin_symlinks/shared_preferences_windows/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/prototype/windows/flutter/ephemeral/.plugin_symlinks/shared_preferences_windows/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/prototype/windows/flutter/ephemeral/.plugin_symlinks/shared_preferences_windows/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend" />
+      <excludeFolder url="file://$MODULE_DIR$/prototype/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/prototype/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/prototype/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
