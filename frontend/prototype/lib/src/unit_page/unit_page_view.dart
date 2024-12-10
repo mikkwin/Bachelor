@@ -6,6 +6,7 @@ import 'package:prototype/src/DAOs/enums/VehicleStatus.dart';
 import 'package:prototype/src/Data/DataPage.dart';
 import 'package:prototype/src/device_settings/settings_view.dart';
 import 'package:prototype/src/http_requests.dart';
+import 'package:prototype/src/post_mortem/post_mortem.dart';
 import 'package:prototype/src/unit_page/unit_page_button.dart';
 import 'package:prototype/src/unit_page/unit_page_info_panel.dart';
 
@@ -23,7 +24,27 @@ class UnitPageView extends StatefulWidget {
 
 class _UnitPageViewState extends State<UnitPageView> {
   Vehicle _vehicle = Vehicle(id: 1, imei: "12345678901245");
-  //late VehicleSettings _settings;
+  late VehicleSettings _settings = VehicleSettings(
+      serialId: 0,
+      imei: "",
+      s010a: 0,
+      e003: 0,
+      e004: 0,
+      e005: 0,
+      e006: 0,
+      e007: 0,
+      e008: 0,
+      e009: 0,
+      e00a: 0,
+      e00b: 0,
+      e00c: 0,
+      e00d: 0,
+      e00e: 0,
+      e010: 0,
+      e011: 0,
+      e012: 0,
+      e013: 0,
+      e014: 0);
   late VehicleReadings _readings = VehicleReadings(
       id: 0,
       timestamp: DateTime.now(),
@@ -56,8 +77,12 @@ class _UnitPageViewState extends State<UnitPageView> {
       response = await getDevice(widget.deviceImei, widget.token);
       setState(() {
         _isLoading = false;
-        _readings = response["readings"];
-        _vehicle = response["vehicle"];
+        try {
+          _readings = response["readings"];
+          _vehicle = response["vehicle"];
+        } on TypeError catch (e) {
+          _vehicle = response["vehicle"];
+        }
       });
     } catch (e) {
       throw Exception("Error fetching device: $e");
@@ -99,10 +124,10 @@ class _UnitPageViewState extends State<UnitPageView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Device Page')),
-      body: const Center(child: CircularProgressIndicator()), // Show loader while loading
-    );
+      return Scaffold(
+        appBar: AppBar(title: const Text('Device Page')),
+        body: const Center(child: CircularProgressIndicator()),
+      );
     }
     return Scaffold(
         appBar: AppBar(
@@ -175,6 +200,7 @@ class _UnitPageViewState extends State<UnitPageView> {
                   DataLoadingButton(
                       buttonName: "Data",
                       textStyle: const TextStyle(fontSize: 24),
+                      enablePreview: _readings.id != 0,
                       data: [
                         "Cumulative Power: ${_readings.cumulativePower.toStringAsFixed(2)}",
                         "Charges: ${_readings.fullCharges.toStringAsFixed(2)}",
@@ -191,14 +217,24 @@ class _UnitPageViewState extends State<UnitPageView> {
                       buttonName: "Settings",
                       textStyle: const TextStyle(fontSize: 24),
                       data: ["test1", "test2", "test3"],
+                      enablePreview: _readings.id != 0,
                       onPress: () {
-                        //Navigator.push(context, MaterialPageRoute(builder: (context) => settingsView(vehicleSettings: _settings) ));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    SettingsView(vehicleSettings: _settings)));
                       }),
                   DataLoadingButton(
                       buttonName: "Rapport",
                       textStyle: const TextStyle(fontSize: 24),
                       enablePreview: false,
-                      onPress: () {}),
+                      onPress: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PostMortem()));
+                      }),
                 ],
               )),
         ));
