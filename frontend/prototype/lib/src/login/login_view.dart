@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/src/unit_search/unit_search_view.dart';
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 
@@ -71,13 +70,13 @@ class LoginView extends StatelessWidget {
                         if (pass == "ede9ca0ba903a037f25f67b2cc24be3a" &&
                             username == "test") {
                           String url =
-                              "https://140.82.33.21:5001/Login/Login?username=${username}&password=${pass}";
+                              "https://140.82.33.21:5001/Login/Login?username=$username&password=$pass";
                           fetchData() async {
                             try {
                               final response = await http.get(Uri.parse(url));
                               if (response.statusCode == 200) {
                                 Navigator.push(
-                                    context,
+                                    context.mounted as BuildContext,
                                     MaterialPageRoute(
                                         builder: (context) => UnitSearchView(
                                             token: response.body)));
@@ -86,7 +85,6 @@ class LoginView extends StatelessWidget {
                               } else {
                                 throw Exception("DATA_FEJL");
                               }
-                            } on http.ClientException {
                             } catch (e) {
                               throw Exception("Error: $e");
                             }
