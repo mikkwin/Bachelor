@@ -220,7 +220,12 @@ class _UnitPageViewState extends State<UnitPageView> {
                   DataLoadingButton(
                       buttonName: "Settings",
                       textStyle: const TextStyle(fontSize: 24),
-                      data: _settings.toMap().entries.map((e) => "${e.key}: ${e.value}").toList(),
+                      data: _settings
+                          .toMap()
+                          .entries
+                          .where((e) => e.key != "imei" && e.key != "serialId")
+                          .map((e) => "${e.key}: ${e.value}")
+                          .toList(),
                       enablePreview: _settings.serialId != 0,
                       onPress: () {
                         Navigator.push(
