@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'login/login_view.dart';
-import 'unit_search/unit_search_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {

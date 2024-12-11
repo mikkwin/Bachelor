@@ -18,7 +18,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => PostMortemProvider()),
       ChangeNotifierProvider(create: (_) => TempProvider())
     ],
-    child: MyApp(),
+    child: const MyApp(),
     )
     );
 }
