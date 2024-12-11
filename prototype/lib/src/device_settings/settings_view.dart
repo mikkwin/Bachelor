@@ -30,7 +30,7 @@ class settingsView extends StatelessWidget {
           headers: {
             "Content-Type": "application/json",
           },
-          body: json.encode(setting.toMap()), // Serialize the object to JSON
+          //  body: json.encode(setting.toMap()), // Serialize the object to JSON
         );
 
         if (response.statusCode == 200) {

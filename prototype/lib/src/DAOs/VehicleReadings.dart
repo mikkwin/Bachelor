@@ -71,18 +71,19 @@ class VehicleReadings extends Equatable {
     return VehicleReadings(
       id: map['id'] as int,
       timestamp: DateTime.parse(map['timestamp'] as String),
-      cumulativePower: map['cumulativePower'] as double,
+      cumulativePower: (map['cumulativePower'] as num).toDouble(),
       fullCharges: map['fullCharges'] as int,
-      hardwareVersion: map['hardwareVersion'] as double,
-      maxVolt: map['maxVolt'] as double,
-      operationalTime: map['operationalTime'] as double,
-      overDischarges: map['overDischarges'] as double,
+      hardwareVersion: (map['hardwareVersion'] as num).toDouble(),
+      maxVolt: (map['maxVolt'] as num).toDouble(),
+      operationalTime: (map['operationalTime'] as num).toDouble(),
+      overDischarges: (map['overDischarges'] as num).toDouble(),
       state: VehicleStatusExtension.fromValue(map['state'] as int),
-      softwareVersion: map['softwareVersion'] as double,
-      panelCurrent: map['panelCurrent'] as double,
-      panelVoltage: map['panelVoltage'] as double,
+      softwareVersion: (map['softwareVersion'] as num).toDouble(),
+      panelCurrent: (map['panelCurrent'] as num).toDouble(),
+      panelVoltage: (map['panelVoltage'] as num).toDouble(),
     );
   }
+
 
 
   String toJson() => json.encode(toMap());

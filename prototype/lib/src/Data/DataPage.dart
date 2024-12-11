@@ -43,6 +43,7 @@ class _DataPageViewState extends State<DataPage> {
 
     String url = "https://140.82.33.21:5001/Data/GetVehicle?IMEI=${widget.deviceImei}&currentToken=${widget.token}";
 
+    print(url);
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {

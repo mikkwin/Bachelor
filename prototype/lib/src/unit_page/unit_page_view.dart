@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/src/DAOs/Vehicle.dart';
+import 'package:prototype/src/DAOs/VehicleInfo.dart';
+import 'package:prototype/src/DAOs/VehicleReadings.dart';
+import 'package:prototype/src/DAOs/enums/ErrorCode.dart';
 import 'package:prototype/src/device_settings/settings_view.dart';
 import 'package:prototype/src/http_requests.dart';
 import 'package:prototype/src/post_mortem/post_mortem.dart';
 import 'package:prototype/src/Data/DataPage.dart';
 import 'package:prototype/src/DAOs/VehicleSettings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UnitPageView extends StatefulWidget {
   final String deviceImei;
@@ -21,7 +25,20 @@ class UnitPageView extends StatefulWidget {
 
 class _UnitPageViewState extends State<UnitPageView> {
   Vehicle _vehicle = Vehicle(id: 1, imei: "12345678901245");
+  VehicleSettings? _settings;
+  VehicleInfo? _info;
   bool _isLoading = false;
+
+  Future<void> saveData(String key, String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+  }
+
+  static Future<String?> getData(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
+  }
+
 
   @override
   void initState() {
@@ -36,6 +53,21 @@ class _UnitPageViewState extends State<UnitPageView> {
 
     try {
       _vehicle = await getDevice(widget.deviceImei, widget.token);
+      print(1);
+      _info = await fetchData(widget.deviceImei, widget.token);
+      print(2);
+      _settings = await fetchSettings(widget.deviceImei, widget.token);
+
+      if(_info != null) {
+        List<ErrorCode> codes = _info!.Errors;
+        List<VehicleReadings> readings = _info!.Readings;
+
+
+      }
+      if(_settings != null) {
+        print("Settings e00d:  ${_settings!.e00d}");
+      }
+
     } catch (e) {
       throw Exception("Error fetching device: $e");
     } finally {

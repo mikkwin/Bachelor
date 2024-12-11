@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-
 class VehicleSettings {
   int serialId;
   String imei;
@@ -46,7 +43,31 @@ class VehicleSettings {
     required this.e014,
   });
 
-  
+  factory VehicleSettings.fromJson(Map<String, dynamic> jsonData) {
+    return VehicleSettings(
+      serialId: jsonData['serialId'] as int,
+      imei: jsonData['imei'] as String,
+      s010a: (jsonData['s010a'] as num).toDouble(),
+      e003: (jsonData['e003'] as num).toDouble(),
+      e004: (jsonData['e004'] as num).toDouble(),
+      e005: (jsonData['e005'] as num).toDouble(),
+      e006: (jsonData['e006'] as num).toDouble(),
+      e007: (jsonData['e007'] as num).toDouble(),
+      e008: (jsonData['e008'] as num).toDouble(),
+      e009: (jsonData['e009'] as num).toDouble(),
+      e00a: (jsonData['e00a'] as num).toDouble(),
+      e00b: (jsonData['e00b'] as num).toDouble(),
+      e00c: (jsonData['e00c'] as num).toDouble(),
+      e00d: (jsonData['e00d'] as num).toDouble(),
+      e00e: (jsonData['e00e'] as num).toDouble(),
+      e010: (jsonData['e010'] as num).toDouble(),
+      e011: (jsonData['e011'] as num).toDouble(),
+      e012: (jsonData['e012'] as num).toDouble(),
+      e013: (jsonData['e013'] as num).toDouble(),
+      e014: (jsonData['e014'] as num).toDouble(),
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'serialId': serialId,
@@ -71,37 +92,4 @@ class VehicleSettings {
       'e014': e014,
     };
   }
-
-  // Factory constructor to create a VehicleSetting object from a map
-  factory VehicleSettings.fromMap(Map<String, dynamic> map) {
-    return VehicleSettings(
-      serialId: map['serialId'],
-      imei: map['imei'],
-      s010a: map['s010a'],
-      e003: map['e003'],
-      e004: map['e004'],
-      e005: map['e005'],
-      e006: map['e006'],
-      e007: map['e007'],
-      e008: map['e008'],
-      e009: map['e009'],
-      e00a: map['e00a'],
-      e00b: map['e00b'],
-      e00c: map['e00c'],
-      e00d: map['e00d'],
-      e00e: map['e00e'],
-      e010: map['e010'],
-      e011: map['e011'],
-      e012: map['e012'],
-      e013: map['e013'],
-      e014: map['e014'],
-    );
-  }
-
-  // Method to convert object to JSON string (for API usage)
-  String toJson() => json.encode(toMap());
-
-  // Factory constructor to create object from JSON string
-  factory VehicleSettings.fromJson(String source) =>
-      VehicleSettings.fromMap(json.decode(source));
 }
