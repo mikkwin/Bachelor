@@ -10,7 +10,7 @@ namespace DefaultNamespace
         public int SerialId { get; set; }
 
         [Required]
-        [StringLength(15)]
+        [StringLength(16)]
         public string IMEI { get; set; }
 
         [Required]

@@ -25,13 +25,14 @@ public class DataService : IDataService
 
         Random random = new Random();
         
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 60; i++)
         {
             DateTime time = DateTime.Now;
+            time = time.AddHours(-1);
 
             VehicleReadings reading = new VehicleReadings()
             {
-                Timestamp = time.AddMinutes(-5),
+                Timestamp = time.AddMinutes(1),
                 Fullcharges = random.Next(10000),
                 CumulativePower = random.NextDouble() * 1000,
                 HardwareVersion = 1.1,

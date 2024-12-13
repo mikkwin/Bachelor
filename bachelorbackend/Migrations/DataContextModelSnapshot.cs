@@ -218,7 +218,7 @@ namespace bachelorbackend.Migrations
 
                     b.Property<string>("IMEI")
                         .IsRequired()
-                        .HasMaxLength(15)
+                        .HasMaxLength(16)
                         .HasColumnType("TEXT");
 
                     b.Property<double>("S010a")

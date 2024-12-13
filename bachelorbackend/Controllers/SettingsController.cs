@@ -22,17 +22,12 @@ public class SettingsController : ControllerBase
     
     [HttpGet("GetSettings")]
     [AllowAnonymous]
-    public async Task<ActionResult> getSettings(string imei, string currentToken)
+    public Task<VehicleSetting> getSettings(string imei, string currentToken)
     {
-        var setting = await _settingsService.getSettings(imei, currentToken);
-
-        if (setting != null)
-        {
-            
-        }
+        var setting = _settingsService.getSettings(imei, currentToken).Result;
         
-
-        return BadRequest("Invalid token or IMEI");
+        return Task.FromResult(setting);
+        
     }
     
     [HttpPatch("UpdateSettings")]
