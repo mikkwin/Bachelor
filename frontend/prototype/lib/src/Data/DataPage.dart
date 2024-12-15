@@ -9,13 +9,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
 class DataPage extends StatefulWidget {
-  @override
-  _DataPageState createState() => _DataPageState();
+  final String deviceImei;
+  final String token;
+
+  const DataPage(
+      {super.key, required this.token, required this.deviceImei});
+  static const routeName = '/data_page';
+
+
+@override
+createState() => _DataPageViewState();
 }
 
-class _DataPageState extends State<DataPage> {
+class _DataPageViewState extends State<DataPage> {
   final GlobalKey<LineChartWidgetState> chartKey = GlobalKey<LineChartWidgetState>();
-  final String url = "https://localhost:5001/Data/GetVehicle?IMEI=8945222";
+  
 
   Future<void> saveData(String key, String value) async {
     final prefs = await SharedPreferences.getInstance();
@@ -28,15 +36,18 @@ class _DataPageState extends State<DataPage> {
   }
 
   Future<Map<String, dynamic>> fetchData() async {
+    String url = "https://140.82.33.21:5001/Data/GetVehicle?IMEI=${widget.deviceImei}&currentToken=${widget.token}";
     try {
       final response = await http.get(Uri.parse(url));
+      print(response.statusCode);
       if (response.statusCode == 200) {
         await saveData("VehicleReadingsResponseJson", response.body);
         String? cached = await getData("VehicleReadingsResponseJson");
-
+        print(cached);
         if(cached != null){
         final decoded = json.decode(cached);
         final readings = decoded['readings'] as List;
+        
         if (decoded != null) {
           List<VehicleReadings> temp = [];
 

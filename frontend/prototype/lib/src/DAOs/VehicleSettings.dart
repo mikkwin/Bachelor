@@ -73,35 +73,28 @@ class VehicleSettings {
   }
 
   // Factory constructor to create a VehicleSetting object from a map
-  factory VehicleSettings.fromMap(Map<String, dynamic> map) {
+  factory VehicleSettings.fromJson(Map<String, dynamic> jsonData) {
     return VehicleSettings(
-      serialId: map['serialId'],
-      imei: map['imei'],
-      s010a: double.parse("${map["s010a"]}"),
-      e003: double.parse("${map["e003"]}"),
-      e004: double.parse("${map["e004"]}"),
-      e005: double.parse("${map["e005"]}"),
-      e006: double.parse("${map["e006"]}"),
-      e007: double.parse("${map["e007"]}"),
-      e008: double.parse("${map["e008"]}"),
-      e009: double.parse("${map["e009"]}"),
-      e00a: double.parse("${map["e00a"]}"),
-      e00b: double.parse("${map["e00b"]}"),
-      e00c: double.parse("${map["e00c"]}"),
-      e00d: double.parse("${map["e00d"]}"),
-      e00e: double.parse("${map["e00e"]}"),
-      e010: double.parse("${map["e010"]}"),
-      e011: double.parse("${map["e011"]}"),
-      e012: double.parse("${map["e012"]}"),
-      e013: double.parse("${map["e013"]}"),
-      e014: double.parse("${map["e014"]}"),
+      serialId: jsonData['serialId'] as int,
+      imei: jsonData['imei'] as String,
+      s010a: (jsonData['s010a'] as num).toDouble(),
+      e003: (jsonData['e003'] as num).toDouble(),
+      e004: (jsonData['e004'] as num).toDouble(),
+      e005: (jsonData['e005'] as num).toDouble(),
+      e006: (jsonData['e006'] as num).toDouble(),
+      e007: (jsonData['e007'] as num).toDouble(),
+      e008: (jsonData['e008'] as num).toDouble(),
+      e009: (jsonData['e009'] as num).toDouble(),
+      e00a: (jsonData['e00a'] as num).toDouble(),
+      e00b: (jsonData['e00b'] as num).toDouble(),
+      e00c: (jsonData['e00c'] as num).toDouble(),
+      e00d: (jsonData['e00d'] as num).toDouble(),
+      e00e: (jsonData['e00e'] as num).toDouble(),
+      e010: (jsonData['e010'] as num).toDouble(),
+      e011: (jsonData['e011'] as num).toDouble(),
+      e012: (jsonData['e012'] as num).toDouble(),
+      e013: (jsonData['e013'] as num).toDouble(),
+      e014: (jsonData['e014'] as num).toDouble(),
     );
   }
-
-  // Method to convert object to JSON string (for API usage)
-  String toJson() => json.encode(toMap());
-
-  // Factory constructor to create object from JSON string
-  factory VehicleSettings.fromJson(String source) =>
-      VehicleSettings.fromMap(json.decode(source));
 }
