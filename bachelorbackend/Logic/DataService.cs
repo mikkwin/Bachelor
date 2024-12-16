@@ -18,21 +18,52 @@ public class DataService : IDataService
         this.config = config;
         _context = context;
     }
+    
+    private IEnumerable<DateTime> EachInstance(DateTime from, DateTime thru, int filter)
+    {
 
-    private List<VehicleReadings> RandomVehicleReadingsGen()
+        switch (filter)
+        {
+            case 1: //day
+                for(var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+                    yield return day;
+                break;
+            case 2: //hour
+                for (var hour = from.Date; hour.Date <= thru.Date; hour = hour.AddHours(1))
+                    yield return hour;
+                break;
+            case 3: //10 minute interval
+                for (var fifteen = from.Date; fifteen.Date <= thru.Date; fifteen = fifteen.AddMinutes(15))
+                    yield return fifteen;
+                break; 
+            case 4: //1 min interval
+                for (var min = from.Date; min.Date <= thru.Date; min = min.AddMinutes(1))
+                    yield return min;
+                break; 
+        }
+        
+        
+        for(var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+            yield return day;
+    }
+
+    private List<VehicleReadings> RandomVehicleReadingsGen(DateTime start, DateTime end, string imei)
     {
         List<VehicleReadings> readings = new List<VehicleReadings>();
+        
+        TimeSpan span = end.Subtract(start);
+        int spanInt = (int)span.TotalMinutes / 15;
 
         Random random = new Random();
-        
-        for (int i = 0; i < 60; i++)
+
+        for (int i = 0; i < spanInt; i++)
         {
-            DateTime time = DateTime.Now;
-            time = time.AddHours(-1);
+            start = start.AddMinutes(15);
 
             VehicleReadings reading = new VehicleReadings()
             {
-                Timestamp = time.AddMinutes(1),
+                IMEI = imei,
+                Timestamp = start,
                 Fullcharges = random.Next(10000),
                 CumulativePower = random.NextDouble() * 1000,
                 HardwareVersion = 1.1,
@@ -44,6 +75,7 @@ public class DataService : IDataService
                 PanelCurrent = random.NextDouble() * 2000,
                 PanelVoltage = random.Next(30)
             };
+            Console.WriteLine("Reading added");
             
             readings.Add(reading);
         }
@@ -71,6 +103,13 @@ public class DataService : IDataService
         return codes;
     }
     
+    
+
+
+    private bool isInDateRange(DateTime from, DateTime to, DateTime query)
+    {
+        return (from.Ticks >= query.Ticks) && (to.Ticks >= query.Ticks);
+    }
 
     public List<Vehicle> getTechnicianHistory(int techID)
     {
@@ -239,12 +278,47 @@ public class DataService : IDataService
             if (_context.VehicleInfos.Any(u => u.IMEI == imei))
             {
                 VehicleInfo info = (await _context.VehicleInfos.FirstOrDefaultAsync(u => u.IMEI == imei))!;
+                List<VehicleReadings> readingsList = (await _context.VehicleReadings.Where(x => x.IMEI == imei).ToListAsync());
+                info.Readings = readingsList;
                 return info;
             }
         }
 
         return null!;
     }
+
+    public async Task<VehicleInfo> getVehicleInfo(string imei, string currentToken, DateTime start, DateTime end)
+    {
+        if(checkCurrentToken(currentToken))
+        {
+            if (_context.VehicleInfos.Any(u => u.IMEI == imei))
+            {
+                VehicleInfo info = (await _context.VehicleInfos.FirstOrDefaultAsync(u => u.IMEI == imei))!;
+                List<VehicleReadings> readingsList = (await _context.VehicleReadings.Where(x => x.IMEI == imei).ToListAsync());
+                info.Readings = filterReadingsByDate(readingsList, start, end);
+                return info;
+            }
+        }
+
+        return null!;
+    }
+
+
+    private List<VehicleReadings> filterReadingsByDate(List<VehicleReadings> readings, DateTime startDate, DateTime endDate)
+    {
+        List<VehicleReadings> filteredReadings = new List<VehicleReadings>();
+
+        foreach (var reading in readings)
+        {
+            if(isInDateRange(startDate, endDate, reading.Timestamp))
+            {
+                filteredReadings.Add(reading);
+            }
+        }
+        
+        return filteredReadings;
+    }
+    
 
     public async Task<VehicleInfo> getVehicleInfo(string imei)
     {
@@ -253,7 +327,7 @@ public class DataService : IDataService
         VehicleInfo vehicleInfo = new VehicleInfo
         {
             Errors = returnRandomErrors(),
-            Readings = RandomVehicleReadingsGen(),
+            Readings = RandomVehicleReadingsGen(DateTime.Now.AddDays(-1), DateTime.Now, imei) ,
             LatCords = 5.5,
             LonCords = 10.10,
             ProductType = "MPPT DTU",
@@ -321,7 +395,7 @@ public class DataService : IDataService
                 VehicleInfo vehicleInfo = new VehicleInfo()
                 {
                     Errors = returnRandomErrors(),
-                    Readings = RandomVehicleReadingsGen(),
+                    Readings = RandomVehicleReadingsGen(DateTime.Today.AddDays(-1), DateTime.Now, imei),
                     IMEI = imei,
                     LatCords = random.NextDouble() * 5.5,
                     LonCords = random.NextDouble() * 10.10,

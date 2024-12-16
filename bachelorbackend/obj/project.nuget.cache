@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "nSqT9TYYAOg=",
+  "dgSpecHash": "WdbMK0wNJ3I=",
   "success": true,
-  "projectFilePath": "C:\\Users\\poizo\\RiderProjects\\Bachelorx\\bachelorbackend\\bachelorbackend.csproj",
+  "projectFilePath": "C:\\Users\\poizo\\RiderProjects\\bachelorbackend_temp\\bachelorbackend\\bachelorbackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\poizo\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\poizo\\.nuget\\packages\\microsoft.data.sqlite.core\\6.0.36\\microsoft.data.sqlite.core.6.0.36.nupkg.sha512",
@@ -34,7 +34,7 @@
     "C:\\Users\\poizo\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\poizo\\.nuget\\packages\\system.text.encodings.web\\6.0.1\\system.text.encodings.web.6.0.1.nupkg.sha512",
     "C:\\Users\\poizo\\.nuget\\packages\\system.text.json\\6.0.11\\system.text.json.6.0.11.nupkg.sha512",
-    "C:\\Users\\poizo\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\6.0.36\\microsoft.netcore.app.host.linux-x64.6.0.36.nupkg.sha512"
+    "C:\\Users\\poizo\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\6.0.33\\microsoft.netcore.app.host.linux-x64.6.0.33.nupkg.sha512"
   ],
   "logs": []
 }

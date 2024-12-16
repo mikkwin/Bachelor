@@ -10,6 +10,9 @@ public class VehicleReadings
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
+    
+    [Required]
+    public string IMEI { get; set; }
 
     [Required]
     public DateTime Timestamp { get; set; }

@@ -97,6 +97,10 @@ namespace bachelorbackend.Migrations
                     b.Property<double>("HardwareVersion")
                         .HasColumnType("REAL");
 
+                    b.Property<string>("IMEI")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<double>("MaxVolt")
                         .HasColumnType("REAL");
 

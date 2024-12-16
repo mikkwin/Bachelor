@@ -13,6 +13,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IDataService, DataService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ISettingsService, SettingsService>();
+builder.Services.AddScoped<IAnalysisService, AnalysisService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

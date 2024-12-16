@@ -81,6 +81,22 @@ public class DataController : ControllerBase
 
         return Task.FromResult(vehicleInfo);
     }
+    
+    [HttpGet("GetVehicleDateQuery")]
+    [AllowAnonymous]
+    public Task<VehicleInfo> getVehicle(string imei, string currentToken, long startDateMillis, long endDateMillis)
+    {
+        DateTime startDate = DateTimeOffset.FromUnixTimeMilliseconds(startDateMillis).DateTime;
+        DateTime endDate = DateTimeOffset.FromUnixTimeMilliseconds(endDateMillis).DateTime;
+        startDate = startDate.AddHours(1); //UTC til dansk tid
+        endDate = endDate.AddHours(1);
+
+        Console.WriteLine(startDate + " - " + endDate);
+        
+        VehicleInfo vehicleInfo = _dataService.getVehicleInfo(imei, currentToken, startDate, endDate).Result;
+        
+        return Task.FromResult(vehicleInfo);
+    }
 
 
 
@@ -88,7 +104,7 @@ public class DataController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<string>> FillDatabase()
     {
-        _dataService.fillDatabase();
+        await _dataService.fillDatabase();
         
         return Ok("Database has been created");
     }
