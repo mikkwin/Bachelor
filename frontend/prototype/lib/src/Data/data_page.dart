@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:prototype/src/DAOs/VehicleReadings.dart';
-import 'package:prototype/src/DAOs/enums/VehicleStatus.dart';
-import 'package:prototype/src/Data/Graph.dart';
-import 'package:prototype/src/Data/data_cache.dart';
+import 'package:prototype/src/DAOs/vehicle_readings.dart';
+import 'package:prototype/src/DAOs/enums/vehicle_status.dart';
+import 'package:prototype/src/Data/graph.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
@@ -39,11 +38,9 @@ class _DataPageViewState extends State<DataPage> {
     String url = "https://140.82.33.21:5001/Data/GetVehicle?IMEI=${widget.deviceImei}&currentToken=${widget.token}";
     try {
       final response = await http.get(Uri.parse(url));
-      print(response.statusCode);
       if (response.statusCode == 200) {
         await saveData("VehicleReadingsResponseJson", response.body);
         String? cached = await getData("VehicleReadingsResponseJson");
-        print(cached);
         if(cached != null){
         final decoded = json.decode(cached);
         final readings = decoded['readings'] as List;
@@ -52,9 +49,6 @@ class _DataPageViewState extends State<DataPage> {
           List<VehicleReadings> temp = [];
 
           readings.forEach((reading) {
-            print("Timestamp: ${reading['timestamp']}");
-            print("Panel Voltage: ${reading['panelVoltage']}");
-            print("Panel Current: ${reading['panelCurrent']}");
 
             readings.forEach((reading) {
               var x = VehicleReadings(
@@ -109,7 +103,6 @@ class _DataPageViewState extends State<DataPage> {
         throw Exception("DATA_FEJL");
       }
     } catch (e) {
-      print(e);
       throw Exception("Error: $e");
     }
   }
@@ -167,7 +160,7 @@ class _DataPageViewState extends State<DataPage> {
           ),
           ListTile(
             leading: const Icon(Icons.solar_power),
-            title: Text("Panel Amp: ${(panelCurrent ?? 0.0).toStringAsFixed(3)}"),
+            title: Text("Panel Amp: ${(panelCurrent).toStringAsFixed(3)}"),
           ),
           
           ListTile(

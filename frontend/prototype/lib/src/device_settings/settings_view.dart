@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype/src/DAOs/VehicleSettings.dart';
-import 'package:prototype/src/device_settings/settings_textState.dart';
+import 'package:prototype/src/DAOs/vehicle_settings.dart';
+import 'package:prototype/src/device_settings/settings_text_state.dart';
 
 class SettingsView extends StatefulWidget {
   final VehicleSettings vehicleSettings;

@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-
 class VehicleSettings {
   int serialId;
   String imei;

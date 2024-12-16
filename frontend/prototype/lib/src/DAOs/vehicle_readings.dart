@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:prototype/src/DAOs/enums/ErrorCode.dart';
-import 'package:prototype/src/DAOs/enums/VehicleStatus.dart';
+import 'package:prototype/src/DAOs/enums/vehicle_status.dart';
 
 class VehicleReadings extends Equatable {
 

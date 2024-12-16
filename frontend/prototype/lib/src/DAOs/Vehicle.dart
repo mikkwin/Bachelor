@@ -5,18 +5,18 @@ import 'package:equatable/equatable.dart';
 class Vehicle extends Equatable {
 
   int id;
-  String VehicleName = "";
-  String LicensePlate = "";
+  String vehicleName = "";
+  String licensePlate = "";
   String imei;
-  String CompanyCVR = "";
-  String OrgName = "";
-  int LastTechnicanSearch = -1;
+  String companyCvr = "";
+  String orgName = "";
+  int lastTechnicanSearch = -1;
 
-  String Model = "";
+  String model = "";
 
-  String Make = "";
+  String make = "";
 
-  String Year = "";
+  String year = "";
 
   Vehicle({
     required this.id,
@@ -41,9 +41,9 @@ class Vehicle extends Equatable {
     imei: map['imei'] as String,
     );
 
-    vehicle.OrgName = map['orgName'] == null ? "" : map['orgName'] as String;
-    vehicle.CompanyCVR = map['companyCVR'] == null ? "" : map['companyCVR'] as String;
-    vehicle.LicensePlate = map['licensePlate'] == null ? "" : map['licensePlate'] as String;
+    vehicle.orgName = map['orgName'] == null ? "" : map['orgName'] as String;
+    vehicle.companyCvr = map['companyCVR'] == null ? "" : map['companyCVR'] as String;
+    vehicle.licensePlate = map['licensePlate'] == null ? "" : map['licensePlate'] as String;
 
     return vehicle;
   }

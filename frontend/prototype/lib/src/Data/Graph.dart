@@ -1,12 +1,10 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:prototype/src/DAOs/VehicleReadings.dart';
+import 'package:prototype/src/DAOs/vehicle_readings.dart';
 import 'package:intl/intl.dart';
 
 class LineChartWidget extends StatefulWidget {
-  const LineChartWidget({Key? key}) : super(key: key);
+  const LineChartWidget({super.key});
 
   @override
   LineChartWidgetState createState() => LineChartWidgetState();
@@ -91,13 +89,13 @@ class LineChartWidgetState extends State<LineChartWidget> {
       preventCurveOverShooting: true,
       isStrokeCapRound: true,
       isStepLineChart: false,
-      dotData: FlDotData(show: true),
+      dotData: const FlDotData(show: true),
     ),
   ],
   minX: _dataPoints.isNotEmpty ? _dataPoints.first.x : 0.0,
   maxX: _dataPoints.isNotEmpty ? _dataPoints.last.x : 1.0,
   titlesData: FlTitlesData(
-    topTitles: AxisTitles(
+    topTitles: const AxisTitles(
       sideTitles: SideTitles(showTitles: false),
     ),
     bottomTitles: AxisTitles(
@@ -118,7 +116,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
         },
       ),
     ),
-    leftTitles: AxisTitles(
+    leftTitles: const AxisTitles(
       sideTitles: SideTitles(showTitles: false),
     ),
     rightTitles: AxisTitles(
@@ -136,7 +134,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
     ),
   ),
   borderData: FlBorderData(show: true),
-  gridData: FlGridData(
+  gridData: const FlGridData(
     show: true,
     drawHorizontalLine: true,
     drawVerticalLine: true,
