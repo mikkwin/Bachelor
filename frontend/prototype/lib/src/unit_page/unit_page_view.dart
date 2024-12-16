@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:prototype/src/DAOs/vehicle.dart';
 import 'package:prototype/src/DAOs/vehicle_readings.dart';
 import 'package:prototype/src/DAOs/vehicle_settings.dart';
@@ -205,16 +206,19 @@ class _UnitPageViewState extends State<UnitPageView> {
                   DataLoadingButton(
                       buttonName: "Data",
                       textStyle: const TextStyle(fontSize: 24),
-                      //originale herunder men christian har ændret i hvordan readings bliver hentet, idfk
-                      //enablePreview: _readings.id != 0,
-                      //helt forkert herunder, but as i said idfk
                       enablePreview: _readings.id != 0,
                       data: _readings
                           .toMap()
                           .entries
                           .where((e) => e.key != "imei" && e.key != "id")
-                          .map((e) => "${e.key}: ${e.value}")
-                          .toList(),
+                          .map((e) {
+                        if (e.key == "timestamp") {
+                          return "${e.key}: ${DateFormat('dd-MM-yyyy HH:mm').format(DateTime.parse(e.value))}";
+                        } else if (e.value is double || e.value is num) {
+                          return "${e.key}: ${(e.value as num).toStringAsFixed(2)}";
+                        }
+                        return "${e.key}: ${e.value}";
+                      }).toList(),
                       onPress: () {
                         Navigator.push(
                             context,
