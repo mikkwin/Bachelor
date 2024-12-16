@@ -8,7 +8,7 @@ import 'VehicleReadings.dart';
 class VehicleInfo extends Equatable {
 
   int id;
-  int imei;
+  String imei;
   String ProductType = "";
   double LatCords = 0.0;
   double LonCords = 0.0;
@@ -39,7 +39,7 @@ class VehicleInfo extends Equatable {
   factory VehicleInfo.fromMap(Map<String, dynamic> map){
     return VehicleInfo(
       id: map['id'] as int,
-      imei: map['imei'] as int,
+      imei: map['imei'] as String,
       Errors: map['errors'] as List<ErrorCode>,
       Readings: map['readings'] as List<VehicleReadings>
     );

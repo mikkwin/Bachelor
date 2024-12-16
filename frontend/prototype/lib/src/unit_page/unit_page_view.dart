@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/src/DAOs/Vehicle.dart';
+import 'package:prototype/src/DAOs/vehicle.dart';
 import 'package:prototype/src/DAOs/VehicleReadings.dart';
 import 'package:prototype/src/DAOs/VehicleSettings.dart';
 import 'package:prototype/src/DAOs/enums/VehicleStatus.dart';
@@ -9,6 +9,9 @@ import 'package:prototype/src/http_requests.dart';
 import 'package:prototype/src/post_mortem/post_mortem.dart';
 import 'package:prototype/src/unit_page/unit_page_button.dart';
 import 'package:prototype/src/unit_page/unit_page_info_panel.dart';
+import 'package:prototype/src/DAOs/VehicleInfo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:prototype/src/DAOs/enums/ErrorCode.dart';
 
 class UnitPageView extends StatefulWidget {
   final String deviceImei;
@@ -23,28 +26,10 @@ class UnitPageView extends StatefulWidget {
 }
 
 class _UnitPageViewState extends State<UnitPageView> {
-  Vehicle _vehicle = Vehicle(id: 1, imei: "12345678901245");
-  late VehicleSettings _settings = VehicleSettings(
-      serialId: 0,
-      imei: "",
-      s010a: 0,
-      e003: 0,
-      e004: 0,
-      e005: 0,
-      e006: 0,
-      e007: 0,
-      e008: 0,
-      e009: 0,
-      e00a: 0,
-      e00b: 0,
-      e00c: 0,
-      e00d: 0,
-      e00e: 0,
-      e010: 0,
-      e011: 0,
-      e012: 0,
-      e013: 0,
-      e014: 0);
+  late Vehicle _vehicle = Vehicle(id: 1, imei: "12345678901245");
+  VehicleSettings? _settings;
+  VehicleInfo? _info;
+  bool _isLoading = false;
   late VehicleReadings _readings = VehicleReadings(
       id: 0,
       timestamp: DateTime.now(),
@@ -58,7 +43,16 @@ class _UnitPageViewState extends State<UnitPageView> {
       softwareVersion: 0,
       panelCurrent: 0,
       panelVoltage: 0);
-  bool _isLoading = false;
+
+  Future<void> saveData(String key, String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+  }
+
+  static Future<String?> getData(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
+  }
 
   @override
   void initState() {
@@ -71,21 +65,36 @@ class _UnitPageViewState extends State<UnitPageView> {
       _isLoading = true;
     });
 
-    Map<String, dynamic> deviceResponse;
+    Vehicle deviceResponse;
     VehicleSettings settingsResponse;
+    VehicleInfo infoResponse;
 
     try {
       deviceResponse = await getDevice(widget.deviceImei, widget.token);
-      settingsResponse = await getSettings(widget.deviceImei, widget.token);
+      settingsResponse = await fetchSettings(widget.deviceImei, widget.token);
+      infoResponse = await fetchData(widget.deviceImei, widget.token);
       setState(() {
         _isLoading = false;
         try {
-          _readings = deviceResponse["readings"];
-          _vehicle = deviceResponse["vehicle"];
+          _readings = infoResponse.Readings[0];
+          _vehicle = deviceResponse;
           _settings = settingsResponse;
-        } on TypeError catch (e) {
-          _vehicle = deviceResponse["vehicle"];
+          _info = infoResponse;
+        } on (RangeError, TypeError) {
+          _vehicle = deviceResponse;
           _settings = settingsResponse;
+        }
+      });
+    } on RangeError {
+      deviceResponse = await getDevice(widget.deviceImei, widget.token);
+      settingsResponse = await fetchSettings(widget.deviceImei, widget.token);
+      setState(() {
+        _isLoading = false;
+        try {
+          _vehicle = deviceResponse;
+          _settings = settingsResponse;
+        } catch (e) {
+          throw Exception(e);
         }
       });
     } catch (e) {
@@ -204,6 +213,9 @@ class _UnitPageViewState extends State<UnitPageView> {
                   DataLoadingButton(
                       buttonName: "Data",
                       textStyle: const TextStyle(fontSize: 24),
+                      //originale herunder men christian har ændret i hvordan readings bliver hentet, idfk
+                      //enablePreview: _readings.id != 0,
+                      //helt forkert herunder, but as i said idfk
                       enablePreview: _readings.id != 0,
                       data: [
                         "Cumulative Power: ${_readings.cumulativePower.toStringAsFixed(2)}",
@@ -215,24 +227,26 @@ class _UnitPageViewState extends State<UnitPageView> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DataPage()));
+                                builder: (context) => DataPage(
+                                    token: widget.token,
+                                    deviceImei: widget.deviceImei)));
                       }),
                   DataLoadingButton(
                       buttonName: "Settings",
                       textStyle: const TextStyle(fontSize: 24),
-                      data: _settings
+                      data: _settings!
                           .toMap()
                           .entries
                           .where((e) => e.key != "imei" && e.key != "serialId")
                           .map((e) => "${e.key}: ${e.value}")
                           .toList(),
-                      enablePreview: _settings.serialId != 0,
+                      enablePreview: _settings?.serialId != 0,
                       onPress: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    SettingsView(vehicleSettings: _settings)));
+                                    SettingsView(vehicleSettings: _settings!)));
                       }),
                   DataLoadingButton(
                       buttonName: "Rapport",
@@ -242,7 +256,7 @@ class _UnitPageViewState extends State<UnitPageView> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const PostMortem()));
+                                builder: (context) => PostMortem(token:widget.token)));
                       }),
                 ],
               )),
