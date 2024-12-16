@@ -11,9 +11,9 @@ class DataSharedPreferences {
       DateTime expirationTime = DateTime.now().add(expirationDuration);
       await prefs.setString(_keyData, data);
       await prefs.setString(_keyExpiration, expirationTime.toIso8601String());
-      print('Data saved to SharedPreferences.');
       return true;
     } catch (e) {
+      // ignore: avoid_print
       print('Error saving data to SharedPreferences: $e');
       return false;
     }
@@ -26,23 +26,21 @@ class DataSharedPreferences {
       String? data = prefs.getString(_keyData);
       String? expirationTimeStr = prefs.getString(_keyExpiration);
       if (data == null || expirationTimeStr == null) {
-        print('No data or expiration time found in SharedPreferences.');
         return null; // No data or expiration time found.
       }
 
       DateTime expirationTime = DateTime.parse(expirationTimeStr);
       if (expirationTime.isAfter(DateTime.now())) {
-        print('Data has not expired.');
         // The data has not expired.
         return data;
       } else {
         // Data has expired. Remove it from SharedPreferences.
         await prefs.remove(_keyData);
         await prefs.remove(_keyExpiration);
-        print('Data has expired. Removed from SharedPreferences.');
         return null;
       }
     } catch (e) {
+      // ignore: avoid_print
       print('Error retrieving data from SharedPreferences: $e');
       return null;
     }
@@ -54,8 +52,8 @@ class DataSharedPreferences {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.remove(_keyData);
       await prefs.remove(_keyExpiration);
-      print('Data cleared from SharedPreferences.');
     } catch (e) {
+      // ignore: avoid_print
       print('Error clearing data from SharedPreferences: $e');
     }
   }

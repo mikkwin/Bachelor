@@ -49,7 +49,7 @@ class _SettingsTextState extends State<SettingsTextstate> {
       controller: _controller,
       
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         labelText: widget.label,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixText: widget.suffixText,

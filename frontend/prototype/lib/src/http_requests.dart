@@ -2,13 +2,12 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:prototype/src/DAOs/vehicle.dart';
-import 'package:prototype/src/DAOs/VehicleReadings.dart';
-import 'package:prototype/src/DAOs/VehicleSettings.dart';
-import 'package:prototype/src/DAOs/VehicleInfo.dart';
-import 'package:prototype/src/DAOs/enums/ErrorCode.dart';
+import 'package:prototype/src/DAOs/vehicle_readings.dart';
+import 'package:prototype/src/DAOs/vehicle_settings.dart';
+import 'package:prototype/src/DAOs/vehicle_info.dart';
+import 'package:prototype/src/DAOs/enums/error_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'DAOs/enums/VehicleStatus.dart';
-
+import 'DAOs/enums/vehicle_status.dart';
 
 Future<void> saveData(String key, String value) async {
   final prefs = await SharedPreferences.getInstance();
@@ -16,30 +15,30 @@ Future<void> saveData(String key, String value) async {
 }
 
 Future<String?> getData(String key) async {
-final prefs = await SharedPreferences.getInstance();
-return prefs.getString(key);
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString(key);
 }
 
-
-Future<List<Vehicle>> getDevices(int offset, int amount, int filter, String token, String query) async {
+Future<List<Vehicle>> getDevices(
+    int offset, int amount, int filter, String token, String query) async {
   String url;
   if (query.isEmpty) {
-    url = "https://140.82.33.21:5001/Data/VehicleSearch?query=default&filter=$filter&currentToken=$token&offset=$offset&amount=$amount";
-  }
-  else {
-    url = "https://140.82.33.21:5001/Data/VehicleSearch?query=$query&filter=$filter&currentToken=$token&offset=$offset&amount=$amount";
+    url =
+        "https://140.82.33.21:5001/Data/VehicleSearch?query=default&filter=$filter&currentToken=$token&offset=$offset&amount=$amount";
+  } else {
+    url =
+        "https://140.82.33.21:5001/Data/VehicleSearch?query=$query&filter=$filter&currentToken=$token&offset=$offset&amount=$amount";
   }
 
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
     Iterable l = json.decode(response.body);
-    List<Vehicle> vehicles = List<Vehicle>.from(l.map((model) => 
-    Vehicle.fromMap(model)));
+    List<Vehicle> vehicles =
+        List<Vehicle>.from(l.map((model) => Vehicle.fromMap(model)));
 
     return vehicles;
-  }
-  else {
+  } else {
     throw Exception('Failed to load vehicles.');
   }
 }
@@ -61,18 +60,16 @@ Future<VehicleSettings> getSettings(String imei, String token) async {
 */
 
 Future<Vehicle> getDevice(String imei, String token) async {
-  final response = await http.get(Uri.parse("https://140.82.33.21:5001/Data/getVehicle?imei=$imei&currentToken=$token"));
-  var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+  final response = await http.get(Uri.parse(
+      "https://140.82.33.21:5001/Data/getVehicle?imei=$imei&currentToken=$token"));
   if (response.statusCode == 200) {
     var vehicle = Vehicle.fromJson(response.body);
     return vehicle;
-  }
-  else if (response.statusCode > 200 && response.statusCode < 300) {
+  } else if (response.statusCode > 200 && response.statusCode < 300) {
     Vehicle vehicle = Vehicle(id: 0, imei: "12345678901345");
-    vehicle.OrgName = "Fejl fundet. Please gå tilbage og prøv igen.";
+    vehicle.orgName = "Fejl fundet. Please gå tilbage og prøv igen.";
     return vehicle;
-  }
-  else {
+  } else {
     throw Exception('Failed to load vehicle.');
   }
 }
@@ -85,31 +82,29 @@ Future<VehicleSettings> fetchSettings(String imei, String currentToken) async {
     String? cached = await getData("VehicleSettingsResponseJson");
 
     if (cached != null && cached.isNotEmpty) {
-     final Map<String, dynamic> jsonData = json.decode(cached);
+      final Map<String, dynamic> jsonData = json.decode(cached);
       VehicleSettings setting = VehicleSettings.fromJson(jsonData);
-     return setting;
+      return setting;
     } else {
       final response = await http.get(Uri.parse(url));
-       if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
         await saveData("VehicleSettingsResponseJson", response.body);
         final Map<String, dynamic> jsonData = json.decode(response.body);
         VehicleSettings setting = VehicleSettings.fromJson(jsonData);
 
         return setting;
-        } else {
+      } else {
         throw Exception("SETTINGS_FEJL");
       }
     }
   } catch (e) {
-    print(e);
     throw Exception("Error: $e");
   }
 }
 
 Future<VehicleInfo> fetchData(String imei, String currentToken) async {
-  String url = "https://140.82.33.21:5001/Data/GetVehicle?IMEI=$imei&currentToken=$currentToken";
-
-  print(url);
+  String url =
+      "https://140.82.33.21:5001/Data/GetVehicle?IMEI=$imei&currentToken=$currentToken";
 
   try {
     String? cached = await getData("VehicleReadingsResponseJson");
@@ -122,7 +117,6 @@ Future<VehicleInfo> fetchData(String imei, String currentToken) async {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         rawData = response.body;
-        print(response.statusCode);
         await saveData("VehicleReadingsResponseJson", rawData);
       } else {
         throw Exception("DATA_FEJL: + ${response.statusCode}");
@@ -144,6 +138,7 @@ Future<VehicleInfo> fetchData(String imei, String currentToken) async {
           .map((element) => ErrorCodeExtension.fromValue(element))
           .toList();
     } catch (e) {
+      // ignore: avoid_print
       print("Error mapping Errors to ErrorCode: $e");
     }
 
@@ -154,14 +149,20 @@ Future<VehicleInfo> fetchData(String imei, String currentToken) async {
         timestamp: reading['timestamp'] != null
             ? DateTime.parse(reading['timestamp'])
             : DateTime.now(),
-        cumulativePower: (reading['cumulativePower'] as num?)?.toDouble() ?? 0.0,
+        cumulativePower:
+            (reading['cumulativePower'] as num?)?.toDouble() ?? 0.0,
         fullCharges: reading['fullCharges'] ?? 0,
-        hardwareVersion: (reading['hardwareVersion'] as num?)?.toDouble() ?? 0.0,
+        hardwareVersion:
+            (reading['hardwareVersion'] as num?)?.toDouble() ?? 0.0,
         maxVolt: (reading['maxVolt'] as num?)?.toDouble() ?? 0.0,
-        operationalTime: (reading['operationalTime'] as num?)?.toDouble() ?? 0.0,
+        operationalTime:
+            (reading['operationalTime'] as num?)?.toDouble() ?? 0.0,
         overDischarges: (reading['overDischarges'] as num?)?.toDouble() ?? 0.0,
-        state: reading['state'] == true ? VehicleStatus.active : VehicleStatus.inactive,
-        softwareVersion: (reading['softwareVersion'] as num?)?.toDouble() ?? 0.0,
+        state: reading['state'] == true
+            ? VehicleStatus.active
+            : VehicleStatus.inactive,
+        softwareVersion:
+            (reading['softwareVersion'] as num?)?.toDouble() ?? 0.0,
         panelCurrent: (reading['panelCurrent'] as num?)?.toDouble() ?? 0.0,
         panelVoltage: (reading['panelVoltage'] as num?)?.toDouble() ?? 0.0,
       );
@@ -171,21 +172,12 @@ Future<VehicleInfo> fetchData(String imei, String currentToken) async {
     VehicleInfo info = VehicleInfo(
       id: decoded['id'] ?? 0,
       imei: decoded['imei'] ?? '',
-      Errors: tempErr,
-      Readings: tempRead,
+      errors: tempErr,
+      readings: tempRead,
     );
 
     return info;
-
   } catch (e) {
-    print(e);
     throw Exception("Error: $e");
   }
-}
-
-double _parseDouble(dynamic value) {
-  if (value is num) {
-    return value.toDouble(); // If it's already a number, convert it to double
-  }
-  return 0.0; // Return a default value of 0.0 if the value is not a valid number
 }

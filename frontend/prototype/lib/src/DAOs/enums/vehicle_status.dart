@@ -9,7 +9,7 @@ extension VehicleStatusExtension on VehicleStatus {
     VehicleStatus.inactive: 1,
   };
 
-  static Map<int, VehicleStatus> _reverseValues = {
+  static final Map<int, VehicleStatus> _reverseValues = {
     for (var entry in _values.entries) entry.value: entry.key
   };
 

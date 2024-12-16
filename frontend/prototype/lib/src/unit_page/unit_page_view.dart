@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:prototype/src/DAOs/vehicle.dart';
-import 'package:prototype/src/DAOs/VehicleReadings.dart';
-import 'package:prototype/src/DAOs/VehicleSettings.dart';
-import 'package:prototype/src/DAOs/enums/VehicleStatus.dart';
-import 'package:prototype/src/Data/DataPage.dart';
+import 'package:prototype/src/DAOs/vehicle_readings.dart';
+import 'package:prototype/src/DAOs/vehicle_settings.dart';
+import 'package:prototype/src/DAOs/enums/vehicle_status.dart';
+import 'package:prototype/src/Data/data_page.dart';
 import 'package:prototype/src/device_settings/settings_view.dart';
 import 'package:prototype/src/http_requests.dart';
 import 'package:prototype/src/post_mortem/post_mortem.dart';
 import 'package:prototype/src/unit_page/unit_page_button.dart';
 import 'package:prototype/src/unit_page/unit_page_info_panel.dart';
-import 'package:prototype/src/DAOs/VehicleInfo.dart';
+import 'package:prototype/src/DAOs/vehicle_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:prototype/src/DAOs/enums/ErrorCode.dart';
 
 class UnitPageView extends StatefulWidget {
   final String deviceImei;
@@ -28,7 +28,6 @@ class UnitPageView extends StatefulWidget {
 class _UnitPageViewState extends State<UnitPageView> {
   late Vehicle _vehicle = Vehicle(id: 1, imei: "12345678901245");
   VehicleSettings? _settings;
-  VehicleInfo? _info;
   bool _isLoading = false;
   late VehicleReadings _readings = VehicleReadings(
       id: 0,
@@ -47,11 +46,6 @@ class _UnitPageViewState extends State<UnitPageView> {
   Future<void> saveData(String key, String value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(key, value);
-  }
-
-  static Future<String?> getData(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(key);
   }
 
   @override
@@ -76,10 +70,9 @@ class _UnitPageViewState extends State<UnitPageView> {
       setState(() {
         _isLoading = false;
         try {
-          _readings = infoResponse.Readings[0];
+          _readings = infoResponse.readings[0];
           _vehicle = deviceResponse;
           _settings = settingsResponse;
-          _info = infoResponse;
         } on (RangeError, TypeError) {
           _vehicle = deviceResponse;
           _settings = settingsResponse;
@@ -161,68 +154,71 @@ class _UnitPageViewState extends State<UnitPageView> {
                       )),
                   InfoPanel(
                       info: "Firm",
-                      infoText: _vehicle.OrgName,
+                      infoText: _vehicle.orgName,
                       onButtonPress: () {
                         _openTextDialog(
                             "Firm",
                             (value) => setState(() {
-                                  _vehicle.OrgName = value;
+                                  _vehicle.orgName = value;
                                 }));
                       }),
                   InfoPanel(
                       info: "Make",
-                      infoText: _vehicle.Make,
+                      infoText: _vehicle.make,
                       onButtonPress: () {
                         _openTextDialog(
                             "Make",
                             (value) => setState(() {
-                                  _vehicle.Make = value;
+                                  _vehicle.make = value;
                                 }));
                       }),
                   InfoPanel(
                       info: "Model",
-                      infoText: _vehicle.Model,
+                      infoText: _vehicle.model,
                       onButtonPress: () {
                         _openTextDialog(
                             "Model",
                             (value) => setState(() {
-                                  _vehicle.Model = value;
+                                  _vehicle.model = value;
                                 }));
                       }),
                   InfoPanel(
                       info: "Year",
-                      infoText: _vehicle.Year,
+                      infoText: _vehicle.year,
                       onButtonPress: () {
                         _openTextDialog(
                             "Year",
                             (value) => setState(() {
-                                  _vehicle.Year = value;
+                                  _vehicle.year = value;
                                 }));
                       }),
                   InfoPanel(
                       info: "Nick",
-                      infoText: _vehicle.VehicleName,
+                      infoText: _vehicle.vehicleName,
                       onButtonPress: () {
                         _openTextDialog(
                             "Nickname",
                             (value) => setState(() {
-                                  _vehicle.VehicleName = value;
+                                  _vehicle.vehicleName = value;
                                 }));
                       }),
                   const Expanded(child: SizedBox()),
                   DataLoadingButton(
                       buttonName: "Data",
                       textStyle: const TextStyle(fontSize: 24),
-                      //originale herunder men christian har ændret i hvordan readings bliver hentet, idfk
-                      //enablePreview: _readings.id != 0,
-                      //helt forkert herunder, but as i said idfk
                       enablePreview: _readings.id != 0,
-                      data: [
-                        "Cumulative Power: ${_readings.cumulativePower.toStringAsFixed(2)}",
-                        "Charges: ${_readings.fullCharges.toStringAsFixed(2)}",
-                        "Max Volt: ${_readings.maxVolt.toStringAsFixed(2)}",
-                        "PanelCurrent: ${_readings.panelCurrent.toStringAsFixed(2)}"
-                      ],
+                      data: _readings
+                          .toMap()
+                          .entries
+                          .where((e) => e.key != "imei" && e.key != "id")
+                          .map((e) {
+                        if (e.key == "timestamp") {
+                          return "${e.key}: ${DateFormat('dd-MM-yyyy HH:mm').format(DateTime.parse(e.value))}";
+                        } else if (e.value is double || e.value is num) {
+                          return "${e.key}: ${(e.value as num).toStringAsFixed(2)}";
+                        }
+                        return "${e.key}: ${e.value}";
+                      }).toList(),
                       onPress: () {
                         Navigator.push(
                             context,
@@ -256,7 +252,8 @@ class _UnitPageViewState extends State<UnitPageView> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PostMortem(token:widget.token)));
+                                builder: (context) =>
+                                    PostMortem(token: widget.token)));
                       }),
                 ],
               )),
