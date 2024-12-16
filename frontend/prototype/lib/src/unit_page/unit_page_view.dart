@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/src/DAOs/Vehicle.dart';
+import 'package:prototype/src/DAOs/vehicle.dart';
 import 'package:prototype/src/DAOs/VehicleReadings.dart';
 import 'package:prototype/src/DAOs/VehicleSettings.dart';
 import 'package:prototype/src/DAOs/enums/VehicleStatus.dart';
@@ -26,11 +26,11 @@ class UnitPageView extends StatefulWidget {
 }
 
 class _UnitPageViewState extends State<UnitPageView> {
-  Vehicle _vehicle = Vehicle(id: 1, imei: "12345678901245");
+  late Vehicle _vehicle = Vehicle(id: 1, imei: "12345678901245");
   VehicleSettings? _settings;
   VehicleInfo? _info;
   bool _isLoading = false;
-  /*late VehicleReadings _readings = VehicleReadings(
+  late VehicleReadings _readings = VehicleReadings(
       id: 0,
       timestamp: DateTime.now(),
       cumulativePower: 0,
@@ -42,10 +42,9 @@ class _UnitPageViewState extends State<UnitPageView> {
       state: VehicleStatus.inactive,
       softwareVersion: 0,
       panelCurrent: 0,
-      panelVoltage: 0);*/
+      panelVoltage: 0);
 
-
-Future<void> saveData(String key, String value) async {
+  Future<void> saveData(String key, String value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(key, value);
   }
@@ -66,22 +65,40 @@ Future<void> saveData(String key, String value) async {
       _isLoading = true;
     });
 
+    Vehicle deviceResponse;
+    VehicleSettings settingsResponse;
+    VehicleInfo infoResponse;
+
     try {
-      _vehicle = await getDevice(widget.deviceImei, widget.token);
-      _info = await fetchData(widget.deviceImei, widget.token);
-      _settings = await fetchSettings(widget.deviceImei, widget.token);
-
-    if(_info != null) {
-        List<ErrorCode> codes = _info!.Errors;
-        List<VehicleReadings> readings = _info!.Readings;
-        }
-
-    } catch (e) {
-      throw Exception("Error fetching device: $e");
-    } finally {
+      deviceResponse = await getDevice(widget.deviceImei, widget.token);
+      settingsResponse = await fetchSettings(widget.deviceImei, widget.token);
+      infoResponse = await fetchData(widget.deviceImei, widget.token);
       setState(() {
         _isLoading = false;
+        try {
+          _readings = infoResponse.Readings[0];
+          _vehicle = deviceResponse;
+          _settings = settingsResponse;
+          _info = infoResponse;
+        } on (RangeError, TypeError) {
+          _vehicle = deviceResponse;
+          _settings = settingsResponse;
+        }
       });
+    } on RangeError {
+      deviceResponse = await getDevice(widget.deviceImei, widget.token);
+      settingsResponse = await fetchSettings(widget.deviceImei, widget.token);
+      setState(() {
+        _isLoading = false;
+        try {
+          _vehicle = deviceResponse;
+          _settings = settingsResponse;
+        } catch (e) {
+          throw Exception(e);
+        }
+      });
+    } catch (e) {
+      throw Exception("Error fetching data: $e");
     }
   }
 
@@ -119,7 +136,6 @@ Future<void> saveData(String key, String value) async {
 
   @override
   Widget build(BuildContext context) {
-    List<VehicleReadings> readings = _info!.Readings;
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(title: const Text('Device Page')),
@@ -198,10 +214,9 @@ Future<void> saveData(String key, String value) async {
                       buttonName: "Data",
                       textStyle: const TextStyle(fontSize: 24),
                       //originale herunder men christian har ændret i hvordan readings bliver hentet, idfk
-                      //enablePreview: _readings.id != 0, 
+                      //enablePreview: _readings.id != 0,
                       //helt forkert herunder, but as i said idfk
-                      enablePreview: readings[0].id != 0,
-                      
+                      enablePreview: _readings.id != 0,
                       data: [
                         "Cumulative Power: ${_readings.cumulativePower.toStringAsFixed(2)}",
                         "Charges: ${_readings.fullCharges.toStringAsFixed(2)}",
@@ -212,13 +227,15 @@ Future<void> saveData(String key, String value) async {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DataPage(token: widget.token,
-                                          deviceImei: widget.deviceImei)));
+                                builder: (context) => DataPage(
+                                    token: widget.token,
+                                    deviceImei: widget.deviceImei)));
                       }),
                   DataLoadingButton(
                       buttonName: "Settings",
                       textStyle: const TextStyle(fontSize: 24),
-                      data: _settings!.toMap()
+                      data: _settings!
+                          .toMap()
                           .entries
                           .where((e) => e.key != "imei" && e.key != "serialId")
                           .map((e) => "${e.key}: ${e.value}")
@@ -239,7 +256,7 @@ Future<void> saveData(String key, String value) async {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const PostMortem()));
+                                builder: (context) => PostMortem(token:widget.token)));
                       }),
                 ],
               )),

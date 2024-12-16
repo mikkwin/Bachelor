@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/src/DAOs/Vehicle.dart';
+import 'package:prototype/src/DAOs/vehicle.dart';
 import 'package:prototype/src/login/login_view.dart';
 import 'package:prototype/src/unit_page/unit_page_view.dart';
 import 'package:prototype/src/http_requests.dart';

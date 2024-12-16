@@ -5,7 +5,8 @@ import 'package:prototype/src/unit_search/unit_search_view.dart';
 import 'package:provider/provider.dart';
 
 class PostMortem extends StatelessWidget {
-  const PostMortem({super.key});
+  final String token;
+  const PostMortem({super.key, required this.token});
 
   static const routeName = '/Skades_rapport';
 
@@ -73,7 +74,7 @@ class PostMortem extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const UnitSearchView(token: "")));
+                        builder: (context) => UnitSearchView(token: token)));
                     provider.clearChanges();
               },
               child: const Text('Gem'),

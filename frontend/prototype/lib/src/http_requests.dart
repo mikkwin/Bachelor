@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:prototype/src/DAOs/Vehicle.dart';
+import 'package:prototype/src/DAOs/vehicle.dart';
 import 'package:prototype/src/DAOs/VehicleReadings.dart';
 import 'package:prototype/src/DAOs/VehicleSettings.dart';
 import 'package:prototype/src/DAOs/VehicleInfo.dart';
 import 'package:prototype/src/DAOs/enums/ErrorCode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'DAOs/VehicleReadings.dart';
 import 'DAOs/enums/VehicleStatus.dart';
 
 
@@ -123,9 +122,10 @@ Future<VehicleInfo> fetchData(String imei, String currentToken) async {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         rawData = response.body;
+        print(response.statusCode);
         await saveData("VehicleReadingsResponseJson", rawData);
       } else {
-        throw Exception("DATA_FEJL");
+        throw Exception("DATA_FEJL: + ${response.statusCode}");
       }
     }
 
