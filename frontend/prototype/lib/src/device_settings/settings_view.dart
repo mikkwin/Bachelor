@@ -422,6 +422,8 @@ const SizedBox(height: 10),
                     e014: widget.vehicleSettings.e014,
                   );
                   sendVehicleSetting(veToSend);
+                  
+                  Navigator.pop(context);
                 },
                 child: const Text('Save Changes'),
               ),
